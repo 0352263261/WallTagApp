@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, StyleSheet, ScrollView, TextInput, Image, KeyboardAvoidingView, TouchableOpacity }
+import { Text, StyleSheet, ScrollView, TextInput, Image, KeyboardAvoidingView, TouchableOpacity, Dimensions }
     from 'react-native';
-import { Container, Body, ListItem, Left, Right, CheckBox, Content, List } from 'native-base';
+import { Container, Body, ListItem, Left, Right, CheckBox, Content, List, View } from 'native-base';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 const ic_search = require('../images/ic_search.png');
 const tim_kiem = require('../images/tim_kiem.png');
+const { width, height } = Dimensions.get('window');
 
 export default class Location extends React.Component {
     constructor(props) {
@@ -145,86 +146,104 @@ export default class Location extends React.Component {
         </ListItem>);
     }
 
+    _gotoHome() {
+        this.props.navigation.navigate('NewFeed');
+    }
+
     render() {
         var { navigate } = this.props.navigation;
         return (
-            <ScrollView >
-                <Container style={{ backgroundColor: 'EFEFF4', }}>
-                    <Content>
-                        <ListItem style={styles.item} icon>
-                            <Left>
-                                <Icon name="search" size={18} style={{ marginLeft: 15 }} />
-                            </Left>
-                            <Body>
-                                <TextInput underlineColorAndroid={'transparent'} style={{ fontSize: 16 }}
-                                    placeholder="Tim kiem dia chi" onChangeText={(input_location) => {
-                                        this.setState({ input_location })
-                                    }} />
-                            </Body>
-                        </ListItem>
+            <View>
+                <View style={styles.headerStyle}>
+                    <TouchableOpacity onPress={this._gotoHome.bind(this)}>
+                        <Icon name="long-arrow-left" size={25} color="white" />
+                    </TouchableOpacity>
+                    <Text style={styles.titleStyle}>WallTag</Text>
+                    <View />
+                </View>
 
-                        <Text style={{ marginHorizontal: 20, fontSize: 14, marginTop: 15 }}>BỘ LỌC</Text>
-                        <Text style={{ marginHorizontal: 20, fontSize: 12, marginTop: 15 }}>THỂ LOẠI POSTER</Text>
+                <ScrollView >
+                    <Container style={styles.containerStyle}>
+                        <Content>
+                            <ListItem style={styles.item} icon>
+                                <Left>
+                                    <Icon name="search" size={18} style={{ marginLeft: 15 }} />
+                                </Left>
+                                <Body>
+                                    <TextInput underlineColorAndroid={'transparent'} style={{ fontSize: 16 }}
+                                        placeholder="Tim kiem dia chi" onChangeText={(input_location) => {
+                                            this.setState({ input_location })
+                                        }} />
+                                </Body>
+                            </ListItem>
 
-                        <List style={{ marginTop: 5 }}>
-                            {this.state.checkBoxs1.map(this.convertProductToListItem)}
-                        </List>
+                            <Text style={{ marginHorizontal: 20, fontSize: 14, marginTop: 15 }}>BỘ LỌC</Text>
+                            <Text style={{ marginHorizontal: 20, fontSize: 12, marginTop: 15 }}>THỂ LOẠI POSTER</Text>
 
-                        <Text style={{ marginHorizontal: 20, fontSize: 12, marginTop: 15 }}>THỂ LOẠI TƯỜNG</Text>
+                            <List style={{ marginTop: 5 }}>
+                                {this.state.checkBoxs1.map(this.convertProductToListItem)}
+                            </List>
 
-                        <List style={{ marginTop: 5 }}>
-                            {this.state.checkBoxs2.map(this.convertProductToListItem2)}
-                        </List>
+                            <Text style={{ marginHorizontal: 20, fontSize: 12, marginTop: 15 }}>THỂ LOẠI TƯỜNG</Text>
 
-                        <Text style={{ marginHorizontal: 20, fontSize: 14, marginTop: 15 }}>KÍCH THƯỚC</Text>
-                        <ListItem noBorder style={{ marginHorizontal: 20, height: 38, marginTop: 5 }}>
-                            <Body style={{ backgroundColor: '#FFFFFF', }}>
-                                <KeyboardAvoidingView behavior='padding' enabled>
-                                    <TextInput underlineColorAndroid={'transparent'} style={{ fontSize: 14, height: 38, marginLeft: 15 }}
-                                        keyboardType="numeric"
-                                        placeholder="Kích thước"
-                                        onChangeText={(input_m2) => { this.state.input_m2 }}
-                                    />
-                                </KeyboardAvoidingView>
-                            </Body>
-                            <Right>
-                                <Text>Mét vuông</Text>
-                            </Right>
-                        </ListItem>
+                            <List style={{ marginTop: 5 }}>
+                                {this.state.checkBoxs2.map(this.convertProductToListItem2)}
+                            </List>
 
-                        <Text
-                            style={{ marginHorizontal: 20, fontSize: 14, marginTop: 15 }}>KINH PHÍ</Text>
-                        <ListItem
-                            noBorder style={{ marginHorizontal: 20, height: 38, marginTop: 5 }}>
-                            <Body
-                                style={{ backgroundColor: '#FFFFFF', }}>
-                                <KeyboardAvoidingView behavior='padding' enabled>
-                                    <TextInput
-                                        underlineColorAndroid={'transparent'} style={{ fontSize: 14, height: 38, marginLeft: 15 }}
-                                        keyboardType="numeric"
-                                        placeholder="Kinh phí"
-                                        onChangeText={(input_price) => { this.setState({ input_price }) }}
-                                    />
-                                </KeyboardAvoidingView>
-                            </Body>
-                            <Right>
-                                <Text>Triệu VNĐ</Text>
-                            </Right>
-                        </ListItem>
+                            <Text style={{ marginHorizontal: 20, fontSize: 14, marginTop: 15 }}>KÍCH THƯỚC</Text>
+                            <ListItem noBorder style={{ marginHorizontal: 20, height: 38, marginTop: 5 }}>
+                                <Body style={{ backgroundColor: '#FFFFFF', }}>
+                                    <KeyboardAvoidingView behavior='padding' enabled>
+                                        <TextInput underlineColorAndroid={'transparent'} style={{ fontSize: 14, height: 38, marginLeft: 15 }}
+                                            keyboardType="numeric"
+                                            placeholder="Kích thước"
+                                            onChangeText={(input_m2) => { this.state.input_m2 }}
+                                        />
+                                    </KeyboardAvoidingView>
+                                </Body>
+                                <Right>
+                                    <Text>Mét vuông</Text>
+                                </Right>
+                            </ListItem>
 
-                        <TouchableOpacity
-                            style={{ marginHorizontal: 20, marginVertical: 40, height: 54 }}
-                            onPress={this._handleCheckboxSelected.bind(this, navigate)}
-                        >
-                            <Image source={tim_kiem} />
-                        </TouchableOpacity>
-                    </Content>
-                </Container>
-            </ScrollView>);
+                            <Text
+                                style={{ marginHorizontal: 20, fontSize: 14, marginTop: 15 }}>KINH PHÍ</Text>
+                            <ListItem
+                                noBorder style={{ marginHorizontal: 20, height: 38, marginTop: 5 }}>
+                                <Body
+                                    style={{ backgroundColor: '#FFFFFF', }}>
+                                    <KeyboardAvoidingView behavior='padding' enabled>
+                                        <TextInput
+                                            underlineColorAndroid={'transparent'} style={{ fontSize: 14, height: 38, marginLeft: 15 }}
+                                            keyboardType="numeric"
+                                            placeholder="Kinh phí"
+                                            onChangeText={(input_price) => { this.setState({ input_price }) }}
+                                        />
+                                    </KeyboardAvoidingView>
+                                </Body>
+                                <Right>
+                                    <Text>Triệu VNĐ</Text>
+                                </Right>
+                            </ListItem>
+
+                            <TouchableOpacity
+                                style={{ marginHorizontal: 20, marginVertical: 40, height: 54 }}
+                                onPress={this._handleCheckboxSelected.bind(this, navigate)}
+                            >
+                                <Image source={tim_kiem} />
+                            </TouchableOpacity>
+                        </Content>
+                    </Container>
+                </ScrollView>
+            </View>
+        );
     }
 }
 
 const styles = StyleSheet.create({
+    containerStyle:{
+        backgroundColor: '#EFEFF4', marginBottom: 20
+    },
     item: {
         marginHorizontal: 20,
         marginTop: 20,
@@ -233,5 +252,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         borderRadius: 25
+    },
+    headerStyle: {
+        padding: 10,
+        height: height / 13,
+        backgroundColor: '#F44336',
+        justifyContent: 'space-between',
+        flexDirection: 'row'
+    },
+    titleStyle: {
+        fontFamily: 'Regular',
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white'
     }
 });

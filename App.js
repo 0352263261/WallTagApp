@@ -8,14 +8,17 @@ import Main from "./src/components/Main/Main";
 import Authentication from "./src/components/Authentication/Authentication";
 import History from "./src/components/History/History";
 import Changeinfo from "./src/components/ChangeInfo/ChangeInfo";
+import NewFeed from "./src/components/Main/NewFeed/NewFeed";
 
 const MyStack = createStackNavigator({
+  Location: {screen: Location},
   Main: { screen: Main },
   Authentication: { screen: Authentication },
   History: { screen: History },
   Changeinfo: {screen: Changeinfo},
-  Location: {screen: Location},
-  DetailPost: {screen: DetailPost}
+  
+  DetailPost: {screen: DetailPost},
+  NewFeed: {screen: NewFeed}
 }, {
     headerMode: 'none',
     navigationOptions: {
@@ -26,7 +29,6 @@ const MyStack = createStackNavigator({
 export default class App extends Component {
   render() {
     return (
-      // <AppStackNaivgator />
       <MyStack />
     );
   }
