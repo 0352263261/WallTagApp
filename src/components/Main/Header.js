@@ -30,7 +30,7 @@ export default class Header extends React.Component {
 }
 const styles = StyleSheet.create({
     wrapper: {
-        backgroundColor: '#F44336', height: height / 7
+        backgroundColor: '#F44336', height: height / 8
     },
     row1: {
         flexDirection: 'row', justifyContent: 'space-between'

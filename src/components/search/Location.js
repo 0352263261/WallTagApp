@@ -119,9 +119,9 @@ export default class Location extends React.Component {
     }
 
     convertProductToListItem = (checkbox1) => {
-        return (<ListItem key={checkbox1.id} style={{ marginHorizontal: 20, backgroundColor: '#FFFFFF', height: 38 }}>
+        return (<ListItem key={checkbox1.id} style={styles.itemStyle}>
             <Body>
-                <Text style={{ marginLeft: 15, fontSize: 12 }}>{checkbox1.name}</Text>
+                <Text style={styles.textBoxStyle}>{checkbox1.name}</Text>
             </Body>
             <Right>
                 <CheckBox
@@ -132,16 +132,16 @@ export default class Location extends React.Component {
         </ListItem>);
     }
 
-    convertProductToListItem2 = (checkbox1) => {
-        return (<ListItem key={checkbox1.id} style={{ marginHorizontal: 20, backgroundColor: '#FFFFFF', height: 38 }}>
+    convertProductToListItem2 = (checkbox2) => {
+        return (<ListItem key={checkbox2.id} style={styles.itemStyle}>
             <Body>
-                <Text style={{ marginLeft: 15, fontSize: 12 }}>{checkbox1.name}</Text>
+                <Text style={styles.textBoxStyle}>{checkbox2.name}</Text>
             </Body>
             <Right>
                 <CheckBox
                     color='red'
-                    checked={checkbox1.checked}
-                    onPress={this._handleCheckBox2.bind(this, checkbox1)} />
+                    checked={checkbox2.checked}
+                    onPress={this._handleCheckBox2.bind(this, checkbox2)} />
             </Right>
         </ListItem>);
     }
@@ -170,31 +170,33 @@ export default class Location extends React.Component {
                                     <Icon name="search" size={18} style={{ marginLeft: 15 }} />
                                 </Left>
                                 <Body>
-                                    <TextInput underlineColorAndroid={'transparent'} style={{ fontSize: 16 }}
-                                        placeholder="Tim kiem dia chi" onChangeText={(input_location) => {
+                                    <TextInput underlineColorAndroid={'transparent'}
+                                        style={{ fontSize: 16, fontFamily: 'Regular', fontStyle: 'italic' }}
+                                        placeholder="Nhập địa chỉ" onChangeText={(input_location) => {
                                             this.setState({ input_location })
                                         }} />
                                 </Body>
                             </ListItem>
 
-                            <Text style={{ marginHorizontal: 20, fontSize: 14, marginTop: 15 }}>BỘ LỌC</Text>
-                            <Text style={{ marginHorizontal: 20, fontSize: 12, marginTop: 15 }}>THỂ LOẠI POSTER</Text>
+                            <Text style={styles.mainTopicStyle}>BỘ LỌC</Text>
+                            <Text style={styles.topicStyle}>THỂ LOẠI POSTER</Text>
 
                             <List style={{ marginTop: 5 }}>
                                 {this.state.checkBoxs1.map(this.convertProductToListItem)}
                             </List>
 
-                            <Text style={{ marginHorizontal: 20, fontSize: 12, marginTop: 15 }}>THỂ LOẠI TƯỜNG</Text>
+                            <Text style={styles.topicStyle}>THỂ LOẠI TƯỜNG</Text>
 
                             <List style={{ marginTop: 5 }}>
                                 {this.state.checkBoxs2.map(this.convertProductToListItem2)}
                             </List>
 
-                            <Text style={{ marginHorizontal: 20, fontSize: 14, marginTop: 15 }}>KÍCH THƯỚC</Text>
-                            <ListItem noBorder style={{ marginHorizontal: 20, height: 38, marginTop: 5 }}>
-                                <Body style={{ backgroundColor: '#FFFFFF', }}>
+                            <Text style={styles.mainTopicStyle}>KÍCH THƯỚC</Text>
+                            <ListItem noBorder style={styles.listItemStyle}>
+                                <Body style={{ backgroundColor: '#FFFFFF' }}>
                                     <KeyboardAvoidingView behavior='padding' enabled>
-                                        <TextInput underlineColorAndroid={'transparent'} style={{ fontSize: 14, height: 38, marginLeft: 15 }}
+                                        <TextInput underlineColorAndroid={'transparent'}
+                                            style={styles.inputStyle}
                                             keyboardType="numeric"
                                             placeholder="Kích thước"
                                             onChangeText={(input_m2) => { this.state.input_m2 }}
@@ -202,19 +204,20 @@ export default class Location extends React.Component {
                                     </KeyboardAvoidingView>
                                 </Body>
                                 <Right>
-                                    <Text>Mét vuông</Text>
+                                    <Text style={{ fontFamily: 'Regular' }}>Mét vuông</Text>
                                 </Right>
                             </ListItem>
 
                             <Text
-                                style={{ marginHorizontal: 20, fontSize: 14, marginTop: 15 }}>KINH PHÍ</Text>
+                                style={styles.mainTopicStyle}>KINH PHÍ</Text>
                             <ListItem
-                                noBorder style={{ marginHorizontal: 20, height: 38, marginTop: 5 }}>
+                                noBorder style={styles.listItemStyle}>
                                 <Body
                                     style={{ backgroundColor: '#FFFFFF', }}>
                                     <KeyboardAvoidingView behavior='padding' enabled>
                                         <TextInput
-                                            underlineColorAndroid={'transparent'} style={{ fontSize: 14, height: 38, marginLeft: 15 }}
+                                            underlineColorAndroid={'transparent'}
+                                            style={styles.inputStyle}
                                             keyboardType="numeric"
                                             placeholder="Kinh phí"
                                             onChangeText={(input_price) => { this.setState({ input_price }) }}
@@ -225,12 +228,11 @@ export default class Location extends React.Component {
                                     <Text>Triệu VNĐ</Text>
                                 </Right>
                             </ListItem>
-
                             <TouchableOpacity
-                                style={{ marginHorizontal: 20, marginVertical: 40, height: 54 }}
-                                onPress={this._handleCheckboxSelected.bind(this, navigate)}
-                            >
-                                <Image source={tim_kiem} />
+                                onPress={this._handleCheckboxSelected.bind(this, navigate)}>
+                                <View style={styles.wrapper}>
+                                    <Image source={tim_kiem} style={styles.btnSearchStyle} />
+                                </View>
                             </TouchableOpacity>
                         </Content>
                     </Container>
@@ -240,9 +242,17 @@ export default class Location extends React.Component {
     }
 }
 
+const img_width = width - 40;
+const img_height = (img_width * 54) / 335;
+
 const styles = StyleSheet.create({
-    containerStyle:{
+    containerStyle: {
         backgroundColor: '#EFEFF4', marginBottom: 20
+    },
+    wrapper: {
+        margin: 20,
+        alignItems: 'center',
+        marginBottom: 40
     },
     item: {
         marginHorizontal: 20,
@@ -265,5 +275,43 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: 'white'
+    },
+    btnSearchStyle: {
+        height: img_height,
+        width: img_width
+    },
+    itemStyle: {
+        marginHorizontal: 20, backgroundColor: '#FFFFFF', height: 38
+    },
+    listItemStyle: {
+        marginHorizontal: 20,
+        height: 38,
+        marginTop: 5
+    },
+    topicStyle: {
+        marginHorizontal: 20,
+        fontSize: 12,
+        marginTop: 15,
+        fontFamily: 'Regular',
+        fontWeight: 'bold',
+    },
+    mainTopicStyle: {
+        marginHorizontal: 20,
+        fontSize: 14,
+        marginTop: 15,
+        fontFamily: 'Regular',
+        fontWeight: 'bold',
+    },
+    inputStyle: {
+        fontSize: 14,
+        height: 38,
+        marginLeft: 10,
+        fontStyle: 'italic'
+    },
+    textBoxStyle:{
+        marginLeft: 15,
+        fontSize: 12,
+        fontFamily: 'Regular',
+        fontStyle: 'italic'
     }
 });

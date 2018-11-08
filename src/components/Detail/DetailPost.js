@@ -25,6 +25,10 @@ export default class DetailPost extends React.Component {
         this.props.navigation.navigate('NewFeed');
     }
 
+    _savePoster() {
+        alert(`Đã lưu Poster`);
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -32,10 +36,8 @@ export default class DetailPost extends React.Component {
                     <TouchableOpacity onPress={this._gotoHome.bind(this)}>
                         <Icon name="long-arrow-left" size={25} color="white" />
                     </TouchableOpacity>
-                    <Text style={styles.titleStyle}>Chi tiết poster</Text>
-                    <TouchableOpacity>
-                        <Icon name="heart" size={20} color="white" />
-                    </TouchableOpacity>
+                    <Text style={styles.titleHeaderStyle}>Chi tiết poster</Text>
+                    <View></View>
                 </View>
 
                 <View style={styles.wrapper}>
@@ -54,8 +56,41 @@ export default class DetailPost extends React.Component {
                     </View>
                 </View>
 
+                <View style={{ marginLeft: 10, marginTop: 10 }}>
+                    <Text style={{ fontFamily: 'Regular', fontSize: 16, fontWeight: 'bold' }}>THÔNG TIN CHI TIẾT</Text>
+                </View>
+
                 <View style={styles.wrapperInfo}>
-                    
+                    <Text style={styles.textStyle}>Style Poster</Text>
+                </View>
+
+                <View style={styles.wrapperInfo}>
+                    <Text style={styles.textStyle}>Style Wall</Text>
+                </View>
+
+                <View style={styles.wrapperInfo}>
+                    <Text style={styles.textStyle}>Size</Text>
+                </View>
+
+                <View style={styles.wrapperInfo}>
+                    <Text style={styles.textStyle}>Price</Text>
+                </View>
+
+                <Text style={{ textAlign: 'right', marginRight: 10, fontFamily: 'Regular', fontStyle: 'italic' }}>Tổng phí</Text>
+                <Text style={styles.textPriceStyle}>1,000,000 VND</Text>
+
+                <View style={styles.btnWrapperStyle}>
+                    <TouchableOpacity style={styles.btnSaveStyle} onPress={this._savePoster.bind(this)}>
+                        <View>
+                            <Text style={{ color: '#212121', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Lưu</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <View></View>
+                    <TouchableOpacity style={styles.btnContactStyle} onPress={this._handleContact.bind(this)}>
+                        <View>
+                            <Text style={{ color: '#FFF', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Liên hệ</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -68,7 +103,8 @@ const heightImg = (widthImg * 300) / 500;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#BDBDBD'
+        backgroundColor: '#BDBDBD',
+        justifyContent: 'space-between'
     },
     headerStyle: {
         padding: 10,
@@ -77,7 +113,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
-    titleStyle: {
+    titleHeaderStyle: {
         fontFamily: 'Regular',
         fontSize: 20,
         fontWeight: 'bold',
@@ -96,12 +132,60 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         padding: 5
     },
-    wrapperInfo:{
+    btnWrapperStyle: {
+        height: height / 13,
+        margin: 20,
+        shadowColor: '#212121',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.3,
+        padding: 5,
+        marginBottom: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    wrapperInfo: {
         backgroundColor: '#FFF',
         margin: 10,
+        marginTop: 0,
         shadowColor: '#212121',
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.3,
         padding: 5
+    },
+    titleStyle: {
+        fontFamily: 'Regular',
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#212121'
+    },
+    textStyle: {
+        fontFamily: 'Regular',
+        fontStyle: 'italic',
+        fontSize: 14,
+        fontWeight: 'bold'
+    },
+    textPriceStyle: {
+        textAlign: 'right',
+        marginRight: 10,
+        fontFamily: 'Regular',
+        fontWeight: 'bold',
+        fontSize: 16,
+        color: '#F44336'
+    },
+    btnSaveStyle: {
+        width: width / 3,
+        borderRadius: 5,
+        borderWidth: 1,
+        backgroundColor: '#FFF',
+        borderColor: '#212121',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    btnContactStyle: {
+        width: width / 3,
+        backgroundColor: 'red',
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
