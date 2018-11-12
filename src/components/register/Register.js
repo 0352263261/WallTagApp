@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, Linking, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
+
+const { height, width } = Dimensions.get('window');
 
 
 export default class Register extends Component {
@@ -15,7 +18,7 @@ export default class Register extends Component {
 
   _handleRegister() {
     if (this.state.password === this.state.confirmPass) {
-      fetch("http://192.168.100.58:8080/adsharingspace/auth/register", {
+      fetch("http://192.168.100.60:8080/adsharingspace/auth/register", {
         "method": "POST",
         headers: {
           "Accept": "application/json",
@@ -38,9 +41,13 @@ export default class Register extends Component {
         .catch((error) => {
           console.error(error);
         })
-    }else{
+    } else {
       alert('Mat khau chua dung!');
     }
+  }
+
+  _back_login(){
+    this.props.navigation.navigate('Login');
   }
 
   render() {
@@ -56,8 +63,15 @@ export default class Register extends Component {
 
     return (
       <View style={backgroundStyle}>
+        <View style={styles.headerStyles}>
+          <TouchableOpacity onPress={this._back_login.bind(this)}>
+            <Icon name="long-arrow-left" size={25} color="white" />
+          </TouchableOpacity>
+          <Text style={styles.textTitleStyle}>Đăng ký tài khoản</Text>
+          <View ></View>
+        </View>
         <View style={headerTextStyle}>
-          <Text style={logoText}>Chào mừng bạn đền với</Text>
+          <Text style={logoText}>Chào mừng bạn đến với</Text>
           <Text style={sologanText}>WallTag</Text>
         </View>
 
@@ -125,7 +139,7 @@ const styles = {
   loginForm: {
     marginTop: 30,
     marginLeft: 30,
-    marginRight: 30
+    marginRight: 30,
   },
   inputStyle: {
     height: 40,
@@ -133,6 +147,18 @@ const styles = {
     marginTop: 10,
     backgroundColor: '#FFFFFF',
     fontSize: 17
+  },
+  headerStyles: {
+    padding: 10,
+    height: height / 13,
+    backgroundColor: '#F44336',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }, textTitleStyle: {
+    fontFamily: 'Regular',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFF',
   }
 };
 

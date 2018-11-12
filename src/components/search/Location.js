@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, StyleSheet, ScrollView, TextInput, Image, KeyboardAvoidingView, TouchableOpacity, Dimensions }
+import { Text, StyleSheet, ScrollView, TextInput, Image,
+     KeyboardAvoidingView, TouchableOpacity, Dimensions, SafeAreaView }
     from 'react-native';
 import { Container, Body, ListItem, Left, Right, CheckBox, Content, List, View } from 'native-base';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -16,7 +17,6 @@ export default class Location extends React.Component {
             input_location: '',
             input_m2: '',
             input_price: '',
-            listPoster: [],
             checkBoxs1: [
                 { id: 1, name: 'Poster dán tường' },
                 { id: 2, name: 'Poster vẽ tường' },
@@ -29,30 +29,6 @@ export default class Location extends React.Component {
             ],
         };
     }
-
-    // componentDidMount(){
-    //     fetch("http://192.168.100.58:8080/adsharingspace/auth/login",{
-    //         "method": "POST",
-    //         headers: {
-    //             'Authorization': 10000,
-    //             "Accept": "application/json",
-    //             "Content-Type": "application/json"
-    //           },
-    //     })
-    //     .then((response) => response.json())
-    //     .then((responseJson) => {
-    //         if(responseJson.success == true){
-    //             this.setState({listPoster: responseJson.data});
-    //         }else{
-    //             alert(`Type poster is empty`);
-    //         }
-    //     })
-    //     .catch((error)=>{
-    //        console.error(error);
-    //     });
-
-    //     alert(listPoster.length);
-    // }
 
     static navigationOptions = {
         title: 'WallTag',
@@ -70,30 +46,31 @@ export default class Location extends React.Component {
     }
 
     _handleCheckboxSelected = (navigate) => {
-        var values_array = [];
-        // Dia diem phai lay ra.
-        this.state.input_location === '' ? values_array.push("") : values_array.push(this.state.input_location);
-        this.state.checkBoxs1.forEach(i => {
-            if (i.checked == true) {
-                values_array.push(i.name);
-            }
-            // Neu khong check dua "" vao mang.
-        });
+        navigate('ResultSearch');
+        // var values_array = [];
+        // // Dia diem phai lay ra.
+        // this.state.input_location === '' ? values_array.push("") : values_array.push(this.state.input_location);
+        // this.state.checkBoxs1.forEach(i => {
+        //     if (i.checked == true) {
+        //         values_array.push(i.name);
+        //     }
+        //     // Neu khong check dua "" vao mang.
+        // });
 
-        this.state.checkBoxs2.forEach(j => {
-            if (j.checked == true) {
-                values_array.push(j.name);
-            }
-        });
-        this.state.input_m2 === '' ? values_array.push("") : values_array.push(this.state.input_m2);
-        this.state.input_price === '' ? values_array.push("") : values_array.push(this.state.input_price);
-        if (values_array.length > 0) {
-            alert(`Da chon tieu chi`);
-        } else {
-            alert(`Chua chon tieu chi`);
-        }
-        navigate('PostsScreen', { input_search: values_array })
-        return;
+        // this.state.checkBoxs2.forEach(j => {
+        //     if (j.checked == true) {
+        //         values_array.push(j.name);
+        //     }
+        // });
+        // this.state.input_m2 === '' ? values_array.push("") : values_array.push(this.state.input_m2);
+        // this.state.input_price === '' ? values_array.push("") : values_array.push(this.state.input_price);
+        // if (values_array.length > 0) {
+        //     alert(`Da chon tieu chi`);
+        // } else {
+        //     alert(`Chua chon tieu chi`);
+        // }
+        // navigate('PostsScreen', { input_search: values_array })
+        // return;
     }
 
     _handleCheckBox1 = (checkbox1) => {
@@ -147,13 +124,13 @@ export default class Location extends React.Component {
     }
 
     _gotoHome() {
-        this.props.navigation.navigate('NewFeed');
+        this.props.navigation.navigate('Main');
     }
 
     render() {
         var { navigate } = this.props.navigation;
         return (
-            <View>
+            <SafeAreaView>
                 <View style={styles.headerStyle}>
                     <TouchableOpacity onPress={this._gotoHome.bind(this)}>
                         <Icon name="long-arrow-left" size={25} color="white" />
@@ -171,8 +148,8 @@ export default class Location extends React.Component {
                                 </Left>
                                 <Body>
                                     <TextInput underlineColorAndroid={'transparent'}
-                                        style={{ fontSize: 16, fontFamily: 'Regular', fontStyle: 'italic' }}
-                                        placeholder="Nhập địa chỉ" onChangeText={(input_location) => {
+                                        style={{ fontSize: 14, fontFamily: 'Regular', fontStyle: 'italic' }}
+                                        placeholder="Tên Quận/Phường/Đường" onChangeText={(input_location) => {
                                             this.setState({ input_location })
                                         }} />
                                 </Body>
@@ -237,7 +214,7 @@ export default class Location extends React.Component {
                         </Content>
                     </Container>
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         );
     }
 }

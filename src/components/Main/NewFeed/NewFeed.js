@@ -1,13 +1,14 @@
 import React from 'react';
-import { Text, View, Image, TouchableOpacity }
+import { View }
     from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import TabNavigator from 'react-native-tab-navigator';
 import Home from "./Home/Home";
 import Contact from "./Contact/Contact";
-import TimKiem from "./Search/TimKiem";
+import SavedPoster from "./postersaved/SavedPoster";
 import Notification from "./Notification/Notification";
 import Header from "../Header";
+import SearchAround from "./searcharound/SearchAround";
 
 export default class NewFeed extends React.Component {
     constructor(props) {
@@ -48,7 +49,19 @@ export default class NewFeed extends React.Component {
                         titleStyle={{ fontFamily: 'Regular', fontSize: 12 }}
                         selectedTitleStyle={{ color: "#F44336" }}
                     >
-                        <TimKiem />
+                        <SavedPoster navigation={navigation}/>
+                    </TabNavigator.Item>
+
+                    <TabNavigator.Item
+                        selected={this.state.selectedTab === 'search_around'}
+                        title="Gần đây"
+                        onPress={() => this.setState({ selectedTab: 'search_around' })}
+                        renderIcon={() => <Icon name="location-arrow" size={20} color="white" />}
+                        renderSelectedIcon={() => <Icon name="location-arrow" size={20} color="#F44336" />}
+                        titleStyle={{ fontFamily: 'Regular', fontSize: 12 }}
+                        selectedTitleStyle={{ color: "#F44336" }}
+                    >
+                        <SearchAround navigation={navigation}/>
                     </TabNavigator.Item>
 
                     <TabNavigator.Item

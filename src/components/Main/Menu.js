@@ -1,11 +1,17 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Image }
     from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
 
+// SignOut.
+const resetAction = StackActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+});
 export default class Menu extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {isLogin: true};
+        this.state = { isLogin: true };
     }
 
     _gotoAuthenication() {
@@ -21,6 +27,10 @@ export default class Menu extends React.Component {
     _gotoChangeInfo() {
         const { navigation } = this.props;
         navigation.navigate('Changeinfo');
+    }
+    _handleSignOut() {
+        const { navigation } = this.props;;
+        navigation.dispatch(resetAction);
     }
 
     render() {
@@ -43,7 +53,7 @@ export default class Menu extends React.Component {
                     <TouchableOpacity style={styles.btnSignInStyle} onPress={this._gotoChangeInfo.bind(this)}>
                         <Text style={styles.textSignInStyle}>ChangeInfo</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnSignInStyle}>
+                    <TouchableOpacity style={styles.btnSignInStyle} onPress={this._handleSignOut.bind(this)}>
                         <Text style={styles.textSignInStyle}>Sign Out</Text>
                     </TouchableOpacity>
                 </View>
@@ -109,7 +119,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Regular',
         fontSize: 16
     },
-    loginContainer:{
+    loginContainer: {
         flex: 1, justifyContent: 'space-between', alignItems: 'center'
     }
 });

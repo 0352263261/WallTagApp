@@ -10,8 +10,11 @@ import Authentication from "./src/components/Authentication/Authentication";
 import History from "./src/components/History/History";
 import Changeinfo from "./src/components/ChangeInfo/ChangeInfo";
 import NewFeed from "./src/components/Main/NewFeed/NewFeed";
+import ResultSearch from "./src/components/search/ResultSearch";
 
 const MyStack = createStackNavigator({
+  Login: {screen: Login},
+  Register: {Register},
   Main: { screen: Main },
   Authentication: { screen: Authentication },
   History: { screen: History },
@@ -20,7 +23,9 @@ const MyStack = createStackNavigator({
   DetailPost: {screen: DetailPost},
   NewFeed: {screen: NewFeed},
   Login: {screen: Login},
-  Register: {screen: Register}
+  Register: {screen: Register},
+  ResultSearch: {screen: ResultSearch}
+  
 }, {
     headerMode: 'none',
     navigationOptions: {
@@ -35,3 +40,5 @@ export default class App extends Component {
     );
   }
 }
+
+export {MyStack}

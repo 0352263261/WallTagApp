@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity }
     from 'react-native';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 const { height, width } = Dimensions.get('window');
 
@@ -10,10 +11,11 @@ class ItemPost extends React.Component {
 
     _gotoDetailPoster() {
         const { navigation } = this.props;
-        const {item} = this.props;
+        const { item } = this.props;
         navigation.navigate('DetailPost', {
-            resultPost: item,
-            back_history : "Main"});
+            result_post: item,
+            back_history: "Main"
+        });
     }
 
     render() {
@@ -34,52 +36,28 @@ class ItemPost extends React.Component {
         );
     }
 }
-export default class Home extends React.Component {
+export default class SavedPoster extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            poster: [],
             listPosts: [
                 { id: 1, pathImg: 'Duong dan', address: 'Hoa Lac', sizePost: '45', price: '100', stylePost: 'Poster dan tuong', styleWall: 'bang tin' },
                 { id: 2, pathImg: 'Duong dan', address: 'Ha Noi', sizePost: '50', price: '110', stylePost: 'Poster dan tuong', styleWall: 'bang tin' },
                 { id: 3, pathImg: 'Duong dan', address: 'TP HCM', sizePost: '55', price: '120', stylePost: 'Poster dan tuong', styleWall: 'bang tin' },
-                { id: 4, pathImg: 'Duong dan', address: 'Da Nang', sizePost: '65', price: '130', stylePost: 'Poster dan tuong', styleWall: 'bang tin' },
-                { id: 5, pathImg: 'Duong dan', address: 'Da Nang', sizePost: '65', price: '130', stylePost: 'Poster dan tuong', styleWall: 'bang tin' },
-                { id: 6, pathImg: 'Duong dan', address: 'Da Nang', sizePost: '65', price: '130', stylePost: 'Poster dan tuong', styleWall: 'bang tin' }
             ]
         };
     }
 
-    // componentDidMount(){
-    //     fetch("http://192.168.100.58:8080/adsharingspace/auth/login",{
-    //         "method": "POST",
-    //         headers: {
-    //             'Authorization': 10000,
-    //             "Accept": "application/json",
-    //             "Content-Type": "application/json"
-    //           },
-    //     })
-    //     .then((response) => response.json())
-    //     .then((responseJson) => {
-    //         if(responseJson.success == true){
-    //             this.setState({poster: responseJson.data});
-    //         }else{
-    //             alert(`Type poster is empty`);
-    //         }
-    //     })
-    //     .catch((error)=>{
-    //        console.error(error);
-    //     });
+    _back_new_feed() {
+        this.props.navigation.navigate('Main');
+    }
 
-    //     alert(this.state.poster.length);
-    // }
-
-     render() {
+    render() {
         const { navigation } = this.props;
         return (
             <View style={styles.container}>
                 <View style={styles.headerStyles}>
-                    <Text style={styles.textTitleStyle}>Poster nổi bật</Text>
+                    <Text style={styles.textTitleStyle}>Poster đã lưu</Text>
                 </View>
                 <View style={{ marginBottom: 35 }}>
                     <FlatList
@@ -127,7 +105,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Regular',
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#F44336',
+        color: '#FFF',
         fontStyle: 'italic'
     },
     textInfoStyle: {

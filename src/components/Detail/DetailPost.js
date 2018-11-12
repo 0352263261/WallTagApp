@@ -5,15 +5,16 @@ import { View } from 'native-base';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Swiper from 'react-native-swiper';
 
-const lien_he = require('../images/lien_he.png');
 const { height, width } = Dimensions.get('window');
 const pic2 = require('../../components/images/pic2.jpg');
 const pic1 = require('../../components/images/pic1.jpg');
 export default class DetailPost extends React.Component {
     constructor(props) {
         super(props);
+        
         this.state = {
-            // post: this.props.navigation.state.params.resultPost
+            post: this.props.navigation.state.params.result_post,
+            screen: this.props.navigation.state.params.back_history
         }
     }
 
@@ -22,7 +23,7 @@ export default class DetailPost extends React.Component {
     }
 
     _gotoHome() {
-        this.props.navigation.navigate('NewFeed');
+        this.props.navigation.navigate(this.state.screen);
     }
 
     _savePoster() {
