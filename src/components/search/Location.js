@@ -1,13 +1,18 @@
 import React from 'react';
-import { Text, StyleSheet, ScrollView, TextInput, Image,
-     KeyboardAvoidingView, TouchableOpacity, Dimensions, SafeAreaView }
-    from 'react-native';
+import {
+    Text, StyleSheet, ScrollView, TextInput, Image,
+    KeyboardAvoidingView, TouchableOpacity, Dimensions, SafeAreaView
+} from 'react-native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Container, Body, ListItem, Left, Right, CheckBox, Content, List, View } from 'native-base';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 const ic_search = require('../images/ic_search.png');
 const tim_kiem = require('../images/tim_kiem.png');
 const { width, height } = Dimensions.get('window');
+
+const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } } };
+const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } } };
 
 export default class Location extends React.Component {
     constructor(props) {
@@ -17,17 +22,22 @@ export default class Location extends React.Component {
             input_location: '',
             input_m2: '',
             input_price: '',
+            data: '',
+            detail: '',
             checkBoxs1: [
-                { id: 1, name: 'Poster dán tường' },
-                { id: 2, name: 'Poster vẽ tường' },
-                { id: 3, name: 'Poster điện tử' }
+                { id: 10000, name: 'Poster dán tường' },
+                { id: 10001, name: 'Poster vẽ tường' },
+                { id: 10002, name: 'Poster điện tử' }
             ],
             checkBoxs2: [
-                { id: 1, name: 'Tường quán cafe' },
-                { id: 2, name: 'Bảng tin, tường khu dân cư, đô thị' },
-                { id: 3, name: 'Bảng tin, tường khu văn phòng' }
+                { id: 10000, name: 'Tường quán cafe' },
+                { id: 10001, name: 'Bảng tin, tường khu dân cư, đô thị' },
+                { id: 10002, name: 'Bảng tin, tường khu văn phòng' }
             ],
         };
+    }
+
+    componentDidMount() {
     }
 
     static navigationOptions = {
@@ -45,32 +55,26 @@ export default class Location extends React.Component {
         });
     }
 
-    _handleCheckboxSelected = (navigate) => {
-        navigate('ResultSearch');
-        // var values_array = [];
-        // // Dia diem phai lay ra.
-        // this.state.input_location === '' ? values_array.push("") : values_array.push(this.state.input_location);
-        // this.state.checkBoxs1.forEach(i => {
-        //     if (i.checked == true) {
-        //         values_array.push(i.name);
-        //     }
-        //     // Neu khong check dua "" vao mang.
-        // });
-
-        // this.state.checkBoxs2.forEach(j => {
-        //     if (j.checked == true) {
-        //         values_array.push(j.name);
-        //     }
-        // });
-        // this.state.input_m2 === '' ? values_array.push("") : values_array.push(this.state.input_m2);
+    _handleSearching = (navigate) => {
+        var values_array = "lat=20.979732&lng=105.787902&id_poster=";
+        // this.state.input_location === '' ? values_array+"" : values_array + this.state.input_location;
+        this.state.checkBoxs1.forEach(i => {
+            if (i.checked === true) {
+                console.log('true', i);
+                values_array += i.id + ",";
+            }
+        });
+        values_array += "&id_wall=";
+        this.state.checkBoxs2.forEach(j => {
+            if (j.checked === true) {
+                values_array += j.id + ","
+            }
+        });
+        values_array += "&" + this.state.input_price;
+        console.log(this.state.search_style);
         // this.state.input_price === '' ? values_array.push("") : values_array.push(this.state.input_price);
-        // if (values_array.length > 0) {
-        //     alert(`Da chon tieu chi`);
-        // } else {
-        //     alert(`Chua chon tieu chi`);
-        // }
-        // navigate('PostsScreen', { input_search: values_array })
-        // return;
+        navigate('ResultSearch', { input_search: values_array })
+        return;
     }
 
     _handleCheckBox1 = (checkbox1) => {
@@ -142,18 +146,59 @@ export default class Location extends React.Component {
                 <ScrollView >
                     <Container style={styles.containerStyle}>
                         <Content>
-                            <ListItem style={styles.item} icon>
-                                <Left>
-                                    <Icon name="search" size={18} style={{ marginLeft: 15 }} />
-                                </Left>
-                                <Body>
-                                    <TextInput underlineColorAndroid={'transparent'}
-                                        style={{ fontSize: 14, fontFamily: 'Regular', fontStyle: 'italic' }}
-                                        placeholder="Tên Quận/Phường/Đường" onChangeText={(input_location) => {
-                                            this.setState({ input_location })
-                                        }} />
-                                </Body>
-                            </ListItem>
+                            <GooglePlacesAutocomplete
+                                placeholder='Search'
+                                minLength={2}
+                                autoFocus={false}
+                                returnKeyType={'search'}
+                                listViewDisplayed='auto'
+                                fetchDetails={true}
+                                renderDescription={row => row.description}
+                                onPress={(data, details = null) => {
+                                    console.log(data, details);
+                                    this.setState({ data: data });
+                                    this.setState({ detail: details });
+
+                                }}
+
+                                getDefaultValue={() => ''}
+
+                                query={{
+                                    key: 'AIzaSyCgD9kYZrWSpOyastga8co513G7G58_TGg',
+                                    language: 'vi',
+                                    types: '(cities)'
+                                }}
+
+                                styles={{
+                                    textInputContainer: {
+                                        width: "100%",
+                                        backgroundColor: "#FFF",
+                                        borderRadius: 60,
+                                        padding: 4,
+                                        margin: 10,
+                                        shadowColor: "#263238",
+                                        shadowOffset: { width: 0, height: 3 },
+                                        shadowRadius: 5,
+                                        shadowOpacity: 1.0,
+                                        justifyContent: 'center'
+                                    },
+                                }}
+
+                                // currentLocation={true}
+                                nearbyPlacesAPI='GooglePlacesSearch'
+                                GoogleReverseGeocodingQuery={{
+                                }}
+                                GooglePlacesSearchQuery={{
+                                    rankby: 'distance',
+                                    types: 'food'
+                                }}
+
+                                filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
+                                // predefinedPlaces={[homePlace, workPlace]}
+
+                                debounce={200}
+                                renderLeftButton={() => <Icon name="search" size={18} style={{ marginLeft: 15, justifyContent: 'center' }} />}
+                            />
 
                             <Text style={styles.mainTopicStyle}>BỘ LỌC</Text>
                             <Text style={styles.topicStyle}>THỂ LOẠI POSTER</Text>
@@ -206,7 +251,7 @@ export default class Location extends React.Component {
                                 </Right>
                             </ListItem>
                             <TouchableOpacity
-                                onPress={this._handleCheckboxSelected.bind(this, navigate)}>
+                                onPress={this._handleSearching.bind(this, navigate)}>
                                 <View style={styles.wrapper}>
                                     <Image source={tim_kiem} style={styles.btnSearchStyle} />
                                 </View>
@@ -285,7 +330,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontStyle: 'italic'
     },
-    textBoxStyle:{
+    textBoxStyle: {
         marginLeft: 15,
         fontSize: 12,
         fontFamily: 'Regular',

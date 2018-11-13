@@ -22,7 +22,7 @@ export default class Login extends React.Component {
 
   _onPressLogin() {
     this.props.navigation.navigate('Main');
-    // fetch("http://192.168.100.60:8080/adsharingspace/auth/login", {
+    // fetch("https://spring-boot-wall-tags.herokuapp.com/adsharingspace/auth/login", {
     //   "method": "POST",
     //   headers: {
     //     "Accept": "application/json",

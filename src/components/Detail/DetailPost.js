@@ -31,6 +31,7 @@ export default class DetailPost extends React.Component {
     }
 
     render() {
+        console.log(this.state);
         return (
             <View style={styles.container}>
                 <View style={styles.headerStyle}>
@@ -62,19 +63,19 @@ export default class DetailPost extends React.Component {
                 </View>
 
                 <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>Style Poster</Text>
+                    <Text style={styles.textStyle}>{this.state.post.posterType[0].type}</Text>
                 </View>
 
                 <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>Style Wall</Text>
+                    <Text style={styles.textStyle}>{this.state.post.wallType[0].type}</Text>
                 </View>
 
                 <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>Size</Text>
+                    <Text style={styles.textStyle}>{this.state.post.width * this.state.post.height}</Text>
                 </View>
 
                 <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>Price</Text>
+                    <Text style={styles.textStyle}>{this.state.post.price.text}</Text>
                 </View>
 
                 <Text style={{ textAlign: 'right', marginRight: 10, fontFamily: 'Regular', fontStyle: 'italic' }}>Tổng phí</Text>

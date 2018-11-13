@@ -14,12 +14,13 @@ class ItemPoster extends React.Component {
         const { navigation } = this.props;
         const { item } = this.props;
         navigation.navigate('DetailPost', {
-            resultPost: item,
+            result_post: item,
             back_history: "ResultSearch"
         });
     }
 
     render() {
+        const {item} = this.props;
         return (
             <View>
                 <TouchableOpacity onPress={this._gotoDetail.bind(this)}>
@@ -28,10 +29,10 @@ class ItemPoster extends React.Component {
                             {/* <Image source={pic2} style={{width: img_width, height: img_height}}/> */}
                         </View>
                         <View style={{ flex: 3, marginLeft: 10, padding: 10 }}>
-                            <Text style={styles.item_textStyle}>{this.props.name_poster}</Text>
-                            <Text style={styles.item_textStyle}>{this.props.name_wall}</Text>
-                            <Text style={styles.item_textStyle}>{this.props.size_poster}</Text>
-                            <Text style={styles.item_price}>{this.props.price}</Text>
+                            <Text style={styles.item_textStyle}>{item.wallType}</Text>
+                            <Text style={styles.item_textStyle}>{item.posterType}</Text>
+                            <Text style={styles.item_textStyle}>{item.width * item.height}</Text>
+                            <Text style={styles.item_price}>{item.price.text}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -45,11 +46,36 @@ export default class ResultSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            poster_list: [
-                { id: 1, pathImg: 'Duong dan', address: 'Hoa Lac', sizePost: '45', price: '100', stylePost: 'Poster dan tuong', styleWall: 'bang tin' },
-                { id: 1, pathImg: 'Duong dan', address: 'Hoa Lac', sizePost: '45', price: '100', stylePost: 'Poster dan tuong', styleWall: 'bang tin' }
-            ]
+            search_style: this.props.navigation.state.params.input_search,
+            poster_list: []
         };
+    }
+
+    componentDidMount(){
+        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/search?" + this.state.search_style, {
+            "method": "GET",
+            headers: {
+                'Authorization': 10000,
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            if (responseJson.success === true) {
+                this.setState({ poster_list: responseJson.data });
+                console.log(this.state.poster_list.length);
+            } else {
+                alert(`Type poster is empty`);
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+    _handleBack(){
+        this.props.navigation.navigate('Location');
     }
 
     render() {
@@ -57,7 +83,7 @@ export default class ResultSearch extends React.Component {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerStyle}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={this._handleBack.bind(this)}>
                         <Icon name="long-arrow-left" size={25} color="white" />
                     </TouchableOpacity>
                     <Text style={styles.titleStyle}>Kết quả tìm kiếm</Text>
@@ -74,10 +100,6 @@ export default class ResultSearch extends React.Component {
                         renderItem={({ item, index }) => {
                             return (
                                 <ItemPoster
-                                    name_poster={item.stylePost}
-                                    name_wall={item.styleWall}
-                                    size_poster={item.sizePost}
-                                    price={item.price}
                                     item={item}
                                     navigation={navigation}
                                 />
