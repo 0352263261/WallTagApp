@@ -35,10 +35,12 @@ export default class DetailPost extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.headerStyle}>
-                    <TouchableOpacity onPress={this._gotoHome.bind(this)}>
-                        <Icon name="long-arrow-left" size={25} color="white" />
+                    <TouchableOpacity style={{justifyContent: 'center'}} onPress={this._gotoHome.bind(this)}>
+                        <Icon name="chevron-left" size={20} color="white" />
                     </TouchableOpacity>
-                    <Text style={styles.titleHeaderStyle}>Chi tiết poster</Text>
+                    <View style={{justifyContent: 'center'}}>
+                        <Text style={styles.titleHeaderStyle}>Chi tiết poster</Text>
+                    </View>                   
                     <View></View>
                 </View>
 
@@ -117,9 +119,9 @@ const styles = StyleSheet.create({
     },
     titleHeaderStyle: {
         fontFamily: 'Regular',
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
-        color: 'white'
+        color: 'white',
     },
     imageStyle: {
         height: heightImg,

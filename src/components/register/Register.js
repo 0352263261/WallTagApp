@@ -18,7 +18,7 @@ export default class Register extends Component {
 
   _handleRegister() {
     if (this.state.password === this.state.confirmPass) {
-      fetch("http://192.168.100.60:8080/adsharingspace/auth/register", {
+      fetch("https://spring-boot-wall-tags.herokuapp.com/adsharingspace/auth/register", {
         "method": "POST",
         headers: {
           "Accept": "application/json",
@@ -46,7 +46,7 @@ export default class Register extends Component {
     }
   }
 
-  _back_login(){
+  _back_login() {
     this.props.navigation.navigate('Login');
   }
 
@@ -58,17 +58,17 @@ export default class Register extends Component {
       sologanText,
       loginForm,
       inputStyle,
-      registerButtonStyle
     } = styles;
 
     return (
       <View style={backgroundStyle}>
         <View style={styles.headerStyles}>
-          <TouchableOpacity onPress={this._back_login.bind(this)}>
-            <Icon name="long-arrow-left" size={25} color="white" />
+          <TouchableOpacity style={{ justifyContent: 'center' }} onPress={this._back_login.bind(this)}>
+            <Icon name="chevron-left" size={20} color="white" />
           </TouchableOpacity>
-          <Text style={styles.textTitleStyle}>Đăng ký tài khoản</Text>
-          <View ></View>
+          <View style={{ justifyContent: 'center' }}>
+            <Text style={styles.textTitleStyle}>Đăng ký tài khoản</Text>
+          </View>
         </View>
         <View style={headerTextStyle}>
           <Text style={logoText}>Chào mừng bạn đến với</Text>
@@ -108,11 +108,13 @@ export default class Register extends Component {
           </View>
         </KeyboardAvoidingView>
 
-        <TouchableOpacity onPress={this._handleRegister.bind(this)}>
-          <View style={loginForm}>
-            <Text style={inputStyle}>Dang Ky</Text>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.registerButtonStyle}>
+          <TouchableOpacity onPress={() => navigate('Register')} style={styles.buttonStyle}>
+            <Text style={styles.textStyle}>
+              Đăng ký
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -120,19 +122,24 @@ export default class Register extends Component {
 
 const styles = {
   backgroundStyle: {
-    backgroundColor: '#333333',
+    backgroundColor: '#2196F3',
     width: '100%',
     height: '100%'
   },
   headerTextStyle: {
+    fontFamily: 'Regular',
     marginTop: 100,
     marginLeft: 30
   },
   logoText: {
-    fontSize: 27,
+    fontFamily: 'Regular',
+    fontStyle: 'italic',
+    fontSize: 20,
     color: '#FFFFFF'
   },
   sologanText: {
+    fontFamily: 'Regular',
+    fontSize: 25,
     color: '#FFFFFF',
     marginTop: 10
   },
@@ -142,6 +149,7 @@ const styles = {
     marginRight: 30,
   },
   inputStyle: {
+    fontFamily: 'Regular',
     height: 40,
     paddingLeft: 10,
     marginTop: 10,
@@ -153,12 +161,30 @@ const styles = {
     height: height / 13,
     backgroundColor: '#F44336',
     flexDirection: 'row',
-    justifyContent: 'space-between'
-  }, textTitleStyle: {
+  },
+  textTitleStyle: {
+    justifyContent: 'center',
     fontFamily: 'Regular',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#FFF',
+    marginLeft: 20,
+  },
+  registerButtonStyle: {
+    marginTop: 80,
+    marginLeft: 30,
+    marginRight: 30,
+  },
+  textStyle: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600'
+  },
+  buttonStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EB3349',
+    height: 54
   }
 };
 

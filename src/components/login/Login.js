@@ -35,13 +35,13 @@ export default class Login extends React.Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        if(responseJson.success == true){
-          this.setState({token: responseJson.data.id});
+        if (responseJson.success == true) {
+          this.setState({ token: responseJson.data.id });
           alert(this.state.token);
           // luu token vao AsynStore
-          this.setState({user_name: "", password: ""})
+          this.setState({ user_name: "", password: "" })
           this.props.navigation.navigate('Main');
-        }else{
+        } else {
           alert(`Tai khoan nhap chua dung!`);
         }
       })
@@ -92,7 +92,7 @@ export default class Login extends React.Component {
             <TouchableOpacity onPress={() => navigate('Register')} style={styles.buttonStyle}>
               <Text style={styles.textStyle}>
                 Đăng ký
-                  </Text>
+              </Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>

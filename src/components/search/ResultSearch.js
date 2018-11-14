@@ -83,10 +83,12 @@ export default class ResultSearch extends React.Component {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerStyle}>
-                    <TouchableOpacity onPress={this._handleBack.bind(this)}>
-                        <Icon name="long-arrow-left" size={25} color="white" />
+                    <TouchableOpacity style={{justifyContent: 'center'}} onPress={this._handleBack.bind(this)}>
+                        <Icon name="chevron-left" size={20} color="white" />
                     </TouchableOpacity>
-                    <Text style={styles.titleStyle}>Kết quả tìm kiếm</Text>
+                    <View style={{justifyContent: 'center'}}>
+                        <Text style={styles.titleStyle}>Kết quả tìm kiếm</Text>
+                    </View>
                     <View />
                 </View>
 
