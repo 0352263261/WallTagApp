@@ -4,11 +4,8 @@ import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity }
 
 const { height, width } = Dimensions.get('window');
 
-const pic2 = require('../../../images/pic2.jpg');
-
-class ItemPost extends React.Component {
-
-    _gotoDetailPoster() {
+class ItemPoster extends React.Component {
+    _gotoDetail() {
         const { navigation } = this.props;
         const { item } = this.props;
         navigation.navigate('DetailPost', {
@@ -17,27 +14,28 @@ class ItemPost extends React.Component {
         });
     }
 
-    //TODO: Chinh giao dien.
-
     render() {
-        const { item } = this.props;
+        const {item} = this.props;
         return (
-            <View style={styles.wrapper}>
-                <View style={{ flex: 4, alignItems: 'center' }}>
-                    <Image style={styles.imageStyle} source={pic2} />
-                </View>
-                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexDirection: 'row' }}>
-                        <Text style={styles.textInfoStyle}>{item.wallType[0].type} - {item.width * item.height}m2 - {item.price.text}K/m2</Text>
-                        <TouchableOpacity onPress={this._gotoDetailPoster.bind(this)}>
-                            <Text style={{ color: '#FF3D00', fontStyle: 'italic' }}>Detail>></Text>
-                        </TouchableOpacity>
+            <View>
+                <TouchableOpacity onPress={this._gotoDetail.bind(this)}>
+                    <View style={styles.item_wrapper}>
+                        <View style={{ backgroundColor: 'red', flex: 2 }}>
+                            {/* <Image source={pic2} style={{width: img_width, height: img_height}}/> */}
+                        </View>
+                        <View style={{ flex: 3, marginLeft: 10, padding: 10 }}>
+                            <Text style={styles.item_textStyle}>{item.wallType[0].type}</Text>
+                            <Text style={styles.item_textStyle}>{item.posterType[0].type}</Text>
+                            <Text style={styles.item_textStyle}>{item.width * item.height}</Text>
+                            <Text style={styles.item_price}>{item.price.text}</Text>
+                        </View>
                     </View>
-                </View>
+                </TouchableOpacity>
             </View>
         );
     }
 }
+
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -55,17 +53,17 @@ export default class Home extends React.Component {
                 "Content-Type": "application/json"
             },
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            if (responseJson.success == true) {
-                this.setState({ listPosts: responseJson.data });
-            } else {
-                alert(`Type poster is empty`);
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.success == true) {
+                    this.setState({ listPosts: responseJson.data });
+                } else {
+                    alert(`Type poster is empty`);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     render() {
@@ -79,10 +77,7 @@ export default class Home extends React.Component {
                     <FlatList
                         data={this.state.listPosts}
                         renderItem={({ item, index }) => {
-                            return (<ItemPost
-                                // name={item.wallType[0].type}
-                                // size={item.width * item.height}
-                                // price={item.price.text}
+                            return (<ItemPoster
                                 navigation={navigation}
                                 item={item}
                             />);
@@ -107,16 +102,6 @@ const styles = StyleSheet.create({
         height: height / 18,
         padding: 10
     },
-    wrapper: {
-        height: height * 0.35,
-        backgroundColor: '#FFF',
-        margin: 10,
-        shadowColor: '#2E272B',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.5,
-        padding: 5,
-        paddingBottom: 0
-    },
     textTitleStyle: {
         fontFamily: 'Regular',
         fontSize: 20,
@@ -124,14 +109,20 @@ const styles = StyleSheet.create({
         color: '#F44336',
         fontStyle: 'italic'
     },
-    textInfoStyle: {
-        fontFamily: 'Regular',
-        fontSize: 16,
-        color: '#9E9E9E',
-        fontStyle: 'italic'
+    item_wrapper: {
+        margin: 5,
+        marginBottom: 5,
+        height: height * 0.2,
+        flexDirection: 'row',
+        backgroundColor: '#FFF',
     },
-    imageStyle: {
-        width: widthImg,
-        height: heightImg
+    item_textStyle: {
+        height: (height * 0.2) / 4,
+        justifyContent: 'center'
+    },
+    item_price: {
+        height: (height * 0.2) / 4,
+        justifyContent: 'center',
+        color: '#FF3D00'
     }
 });

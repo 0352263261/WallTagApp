@@ -28,11 +28,11 @@ class ItemPoster extends React.Component {
                         <View style={{ backgroundColor: 'red', flex: 2 }}>
                             {/* <Image source={pic2} style={{width: img_width, height: img_height}}/> */}
                         </View>
-                        <View style={{ flex: 3, marginLeft: 10, padding: 10 }}>
+                        <View style={{ flex: 3, marginLeft: 10, padding: 10, justifyContent: 'space-between' }}>
                             <Text style={styles.item_textStyle}>{item.wallType}</Text>
                             <Text style={styles.item_textStyle}>{item.posterType}</Text>
-                            <Text style={styles.item_textStyle}>{item.width * item.height}</Text>
-                            <Text style={styles.item_price}>{item.price.text}</Text>
+                            <Text style={styles.item_textStyle}>Kích thước: {item.width * item.height} m2</Text>
+                            <Text style={styles.item_price}>Giá: {item.price.text}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
         fontStyle: 'italic'
     },
     item_textStyle: {
-        height: (height * 0.2) / 4,
+        // height: (height * 0.2) / 4,
         justifyContent: 'center'
     },
     item_price: {

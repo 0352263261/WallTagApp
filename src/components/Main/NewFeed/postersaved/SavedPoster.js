@@ -7,9 +7,8 @@ const { height, width } = Dimensions.get('window');
 
 const pic2 = require('../../../images/pic2.jpg');
 
-class ItemPost extends React.Component {
-
-    _gotoDetailPoster() {
+class ItemPoster extends React.Component {
+    _gotoDetail() {
         const { navigation } = this.props;
         const { item } = this.props;
         navigation.navigate('DetailPost', {
@@ -19,19 +18,22 @@ class ItemPost extends React.Component {
     }
 
     render() {
+        const {item} = this.props;
         return (
-            <View style={styles.wrapper}>
-                <View style={{ flex: 4, alignItems: 'center' }}>
-                    <Image style={styles.imageStyle} source={pic2} />
-                </View>
-                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={styles.textInfoStyle}>{this.props.name} - {this.props.size}m2 - {this.props.price}K/m2</Text>
-                        <TouchableOpacity onPress={this._gotoDetailPoster.bind(this)}>
-                            <Text style={{ color: '#FF3D00', fontStyle: 'italic' }}>Detail>></Text>
-                        </TouchableOpacity>
+            <View>
+                <TouchableOpacity onPress={this._gotoDetail.bind(this)}>
+                    <View style={styles.item_wrapper}>
+                        <View style={{ backgroundColor: 'red', flex: 2 }}>
+                            {/* <Image source={pic2} style={{width: img_width, height: img_height}}/> */}
+                        </View>
+                        <View style={{ flex: 3, marginLeft: 10, padding: 10 }}>
+                            <Text style={styles.item_textStyle}>WallType</Text>
+                            <Text style={styles.item_textStyle}>PosterType</Text>
+                            <Text style={styles.item_textStyle}>Kich thuoc</Text>
+                            <Text style={styles.item_price}>Gia</Text>
+                        </View>
                     </View>
-                </View>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -40,12 +42,12 @@ export default class SavedPoster extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            listPosts: [
-                { id: 1, pathImg: 'Duong dan', address: 'Hoa Lac', sizePost: '45', price: '100', stylePost: 'Poster dan tuong', styleWall: 'bang tin' },
-                { id: 2, pathImg: 'Duong dan', address: 'Ha Noi', sizePost: '50', price: '110', stylePost: 'Poster dan tuong', styleWall: 'bang tin' },
-                { id: 3, pathImg: 'Duong dan', address: 'TP HCM', sizePost: '55', price: '120', stylePost: 'Poster dan tuong', styleWall: 'bang tin' },
-            ]
+            listPosts: []
         };
+    }
+
+    componentDidMount(){
+        //TODO: Lay data
     }
 
     _back_new_feed() {
@@ -63,7 +65,7 @@ export default class SavedPoster extends React.Component {
                     <FlatList
                         data={this.state.listPosts}
                         renderItem={({ item, index }) => {
-                            return (<ItemPost
+                            return (<ItemPoster
                                 name={item.address}
                                 size={item.sizePost}
                                 price={item.price}
@@ -91,16 +93,6 @@ const styles = StyleSheet.create({
         height: height / 18,
         padding: 10
     },
-    wrapper: {
-        height: height * 0.31,
-        backgroundColor: '#FFF',
-        margin: 10,
-        shadowColor: '#2E272B',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.5,
-        padding: 5,
-        paddingBottom: 0
-    },
     textTitleStyle: {
         fontFamily: 'Regular',
         fontSize: 20,
@@ -108,14 +100,20 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontStyle: 'italic'
     },
-    textInfoStyle: {
-        fontFamily: 'Regular',
-        fontSize: 16,
-        color: '#9E9E9E',
-        fontStyle: 'italic'
+    item_wrapper: {
+        margin: 5,
+        marginBottom: 5,
+        height: height * 0.2,
+        flexDirection: 'row',
+        backgroundColor: '#FFF',
     },
-    imageStyle: {
-        width: widthImg,
-        height: heightImg
+    item_textStyle: {
+        height: (height * 0.2) / 4,
+        justifyContent: 'center'
+    },
+    item_price: {
+        height: (height * 0.2) / 4,
+        justifyContent: 'center',
+        color: '#FF3D00'
     }
 });

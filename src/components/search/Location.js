@@ -171,20 +171,16 @@ export default class Location extends React.Component {
 
                                 styles={{
                                     textInputContainer: {
-                                        width: "100%",
                                         backgroundColor: "#FFF",
                                         borderRadius: 60,
                                         padding: 4,
                                         margin: 10,
                                         shadowColor: "#263238",
                                         shadowOffset: { width: 0, height: 3 },
-                                        shadowRadius: 5,
-                                        shadowOpacity: 1.0,
-                                        justifyContent: 'center'
+                                        shadowRadius: 1,
+                                        shadowOpacity: 0.3,
                                     },
                                 }}
-
-                                // currentLocation={true}
                                 nearbyPlacesAPI='GooglePlacesSearch'
                                 GoogleReverseGeocodingQuery={{
                                 }}
@@ -194,10 +190,8 @@ export default class Location extends React.Component {
                                 }}
 
                                 filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
-                                // predefinedPlaces={[homePlace, workPlace]}
-
                                 debounce={200}
-                                renderLeftButton={() => <Icon name="search" size={18} style={{ marginLeft: 15, justifyContent: 'center' }} />}
+                                renderLeftButton={() => <Icon name="search" size={18} style={{ marginLeft: 15, justifyContent: 'center', marginTop: 10 }} />}
                             />
 
                             <Text style={styles.mainTopicStyle}>BỘ LỌC</Text>

@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     },
     viewStyle:{
         margin: 5,
+        marginTop: 0,
         height: 40,
         backgroundColor: '#FFF',
         justifyContent: 'center'
