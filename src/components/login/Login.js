@@ -6,7 +6,7 @@ import {
 }
   from 'react-native';
 
-const bg = require('../images/bg.png');
+const bg = require('../images/new-bg.png');
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -21,33 +21,33 @@ export default class Login extends React.Component {
   }
 
   _onPressLogin() {
-    this.props.navigation.navigate('Main');
-    // fetch("https://spring-boot-wall-tags.herokuapp.com/adsharingspace/auth/login", {
-    //   "method": "POST",
-    //   headers: {
-    //     "Accept": "application/json",
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     'phoneOrEmail': this.state.user_name,
-    //     'password': this.state.password
-    //   })
-    // })
-    //   .then((response) => response.json())
-    //   .then((responseJson) => {
-    //     if(responseJson.success == true){
-    //       this.setState({token: responseJson.data.id});
-    //       alert(this.state.token);
-    //       // luu token vao AsynStore
-    //       this.setState({user_name: "", password: ""})
-    //       this.props.navigation.navigate('Main');
-    //     }else{
-    //       alert(`Tai khoan nhap chua dung!`);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
+    // this.props.navigation.navigate('Main');
+    fetch("https://spring-boot-wall-tags.herokuapp.com/adsharingspace/auth/login", {
+      "method": "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        'phoneOrEmail': this.state.user_name,
+        'password': this.state.password
+      })
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if(responseJson.success == true){
+          this.setState({token: responseJson.data.id});
+          alert(this.state.token);
+          // luu token vao AsynStore
+          this.setState({user_name: "", password: ""})
+          this.props.navigation.navigate('Main');
+        }else{
+          alert(`Tai khoan nhap chua dung!`);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   render() {
@@ -73,7 +73,7 @@ export default class Login extends React.Component {
               <TextInput
                 secureTextEntry={true}
                 style={styles.inputStyle}
-                placeholder='Password'
+                placeholder='password'
                 onChangeText={(password) => {
                   this.setState({ password })
                 }}
@@ -128,10 +128,12 @@ const styles = StyleSheet.create({
   },
   logoText: {
     fontSize: 27,
+    fontFamily: 'Regular',
     color: '#FFFFFF'
   },
   sologanText: {
     color: '#FFFFFF',
+    fontFamily: 'Regular',
     marginTop: 10
   },
   loginForm: {
@@ -140,6 +142,8 @@ const styles = StyleSheet.create({
     marginRight: 30
   },
   inputStyle: {
+    fontFamily: 'Regular',
+    fontStyle: 'italic',
     height: 40,
     paddingLeft: 10,
     marginTop: 10,

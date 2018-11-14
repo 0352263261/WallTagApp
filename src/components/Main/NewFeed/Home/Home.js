@@ -20,10 +20,10 @@ class ItemPoster extends React.Component {
             <View>
                 <TouchableOpacity onPress={this._gotoDetail.bind(this)}>
                     <View style={styles.item_wrapper}>
-                        <View style={{ backgroundColor: 'red', flex: 2 }}>
+                        <View style={{ backgroundColor: 'red', flex: 5 }}>
                             {/* <Image source={pic2} style={{width: img_width, height: img_height}}/> */}
                         </View>
-                        <View style={{ flex: 3, marginLeft: 10, padding: 10 }}>
+                        <View style={{ flex: 5, marginLeft: 10, padding: 10 }}>
                             <Text style={styles.item_textStyle}>{item.wallType[0].type}</Text>
                             <Text style={styles.item_textStyle}>{item.posterType[0].type}</Text>
                             <Text style={styles.item_textStyle}>{item.width * item.height}</Text>
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
         fontStyle: 'italic'
     },
     item_wrapper: {
+        flex: 1,
         margin: 5,
         marginBottom: 5,
         height: height * 0.2,

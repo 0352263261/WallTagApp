@@ -22,7 +22,10 @@ export default class Header extends React.Component {
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity style={styles.row2} onPress={this._gotoSearchBar.bind(this)}>
-                    <Image source={img_search_bar} />
+                    <View style={styles.searchStyle}>
+                        <Icon name="search" size={18} style={{ marginLeft: 15 }} />
+                        <Text style={styles.text_search_style}>Tìm kiếm địa điểm</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         );
@@ -41,10 +44,26 @@ const styles = StyleSheet.create({
     btnClick1: {
         marginLeft: 10, marginTop: 5
     },
-    btnClick2:{
+    btnClick2: {
         marginRight: 10, marginTop: 5
     },
     title_text: {
         marginTop: 5, fontSize: 16, color: 'white', fontFamily: 'Regular', fontWeight: 'bold'
+    },
+    searchStyle: {
+        width: width - 40,
+        height: 48,
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        flexDirection: 'row',
+        borderRadius: 60
+    },
+    text_search_style:{
+        fontSize: 16,
+        fontFamily: 'Regular',
+        marginLeft: 15,
+        justifyContent: 'center',
+        color: '#90A4AE',
+        fontStyle: 'italic'
     }
 });
