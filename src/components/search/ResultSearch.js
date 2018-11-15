@@ -8,25 +8,25 @@ const img_height = height * 0.2;
 const img_width = (img_height * 500) / 300;
 const pic2 = require('../../components/images/pic2.jpg');
 
-//TODO: Crop anh.
 class ItemPoster extends React.Component {
     _gotoDetail() {
         const { navigation } = this.props;
         const { item } = this.props;
         navigation.navigate('DetailPost', {
             result_post: item,
-            back_history: "ResultSearch"
+            back_history: "ResultSearch",
+            type_screen: 0
         });
     }
 
     render() {
-        const {item} = this.props;
+        const { item } = this.props;
         return (
             <View>
                 <TouchableOpacity onPress={this._gotoDetail.bind(this)}>
                     <View style={styles.item_wrapper}>
                         <View style={{ backgroundColor: 'red', flex: 5 }}>
-                            {/* <Image source={pic2} style={{width: img_width, height: img_height}}/> */}
+                            <Image source={{ uri: item.imageUrl }} style={styles.img_style} />
                         </View>
                         <View style={{ flex: 5, marginLeft: 10, padding: 10, justifyContent: 'space-between' }}>
                             <Text style={styles.item_textStyle}>{item.wallType[0].type}</Text>
@@ -51,7 +51,7 @@ export default class ResultSearch extends React.Component {
         };
     }
 
-    componentDidMount(){
+    componentDidMount() {
         fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/search?" + this.state.search_style, {
             "method": "GET",
             headers: {
@@ -60,21 +60,21 @@ export default class ResultSearch extends React.Component {
                 "Content-Type": "application/json"
             },
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            if (responseJson.success === true) {
-                this.setState({ poster_list: responseJson.data });
-                console.log(this.state.poster_list.length);
-            } else {
-                alert(`Type poster is empty`);
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.success === true) {
+                    this.setState({ poster_list: responseJson.data });
+                    console.log(this.state.poster_list.length);
+                } else {
+                    alert(`Type poster is empty`);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
-    _handleBack(){
+    _handleBack() {
         this.props.navigation.navigate('Location');
     }
 
@@ -83,10 +83,10 @@ export default class ResultSearch extends React.Component {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerStyle}>
-                    <TouchableOpacity style={{justifyContent: 'center'}} onPress={this._handleBack.bind(this)}>
+                    <TouchableOpacity style={{ justifyContent: 'center' }} onPress={this._handleBack.bind(this)}>
                         <Icon name="chevron-left" size={20} color="white" />
                     </TouchableOpacity>
-                    <View style={{justifyContent: 'center'}}>
+                    <View style={{ justifyContent: 'center' }}>
                         <Text style={styles.titleStyle}>Kết quả tìm kiếm</Text>
                     </View>
                     <View />
@@ -153,5 +153,9 @@ const styles = StyleSheet.create({
         height: (height * 0.2) / 4,
         justifyContent: 'center',
         color: '#FF3D00'
-    }
+    },
+    img_style:{
+        width: (height * 0.2) + 30,
+        height: height * 0.2
+    },
 });

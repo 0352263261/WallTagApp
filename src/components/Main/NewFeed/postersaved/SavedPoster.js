@@ -1,11 +1,9 @@
 import React from 'react';
-import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity }
+import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, AsyncStorage }
     from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 const { height, width } = Dimensions.get('window');
-
-const pic2 = require('../../../images/pic2.jpg');
 
 class ItemPoster extends React.Component {
     _gotoDetail() {
@@ -13,24 +11,25 @@ class ItemPoster extends React.Component {
         const { item } = this.props;
         navigation.navigate('DetailPost', {
             result_post: item,
-            back_history: "Main"
+            back_history: "Main",
+            type_screen: 1
         });
     }
 
     render() {
-        const {item} = this.props;
+        const { item } = this.props;
         return (
             <View>
                 <TouchableOpacity onPress={this._gotoDetail.bind(this)}>
                     <View style={styles.item_wrapper}>
                         <View style={{ backgroundColor: 'red', flex: 5 }}>
-                            {/* <Image source={pic2} style={{width: img_width, height: img_height}}/> */}
+                            <Image source={{ uri: item.imageUrl }} style={styles.img_style} />
                         </View>
                         <View style={{ flex: 5, marginLeft: 10, padding: 10 }}>
-                            <Text style={styles.item_textStyle}>WallType</Text>
-                            <Text style={styles.item_textStyle}>PosterType</Text>
-                            <Text style={styles.item_textStyle}>Kich thuoc</Text>
-                            <Text style={styles.item_price}>Gia</Text>
+                            <Text style={styles.item_textStyle}>{item.wallType[0].type}</Text>
+                            <Text style={styles.item_textStyle}>{item.posterType[0].type}</Text>
+                            <Text style={styles.item_textStyle}>Kích thước: {item.width * item.height} m2</Text>
+                            <Text style={styles.item_price}>Giá: {item.price.text} {item.price.unit}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -46,8 +45,29 @@ export default class SavedPoster extends React.Component {
         };
     }
 
-    componentDidMount(){
-        //TODO: Lay data
+    componentDidMount() {
+        const id_user = AsyncStorage.getItem('@id_user');
+        alert(id_user);
+        //TODO: Lay data. ID user
+        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite", {
+            "method": "GET",
+            headers: {
+                'Authorization': 10000,
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.success === true) {
+                    this.setState({ listPosts: responseJson.data });
+                } else {
+                    alert(`Có lỗi xảy ra!`);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     _back_new_feed() {
@@ -66,9 +86,6 @@ export default class SavedPoster extends React.Component {
                         data={this.state.listPosts}
                         renderItem={({ item, index }) => {
                             return (<ItemPoster
-                                name={item.address}
-                                size={item.sizePost}
-                                price={item.price}
                                 navigation={navigation}
                                 item={item}
                             />);
@@ -116,5 +133,9 @@ const styles = StyleSheet.create({
         height: (height * 0.2) / 4,
         justifyContent: 'center',
         color: '#FF3D00'
-    }
+    },
+    img_style:{
+        width: (height * 0.2) + 30,
+        height: height * 0.2
+    },
 });

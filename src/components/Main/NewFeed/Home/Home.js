@@ -3,14 +3,14 @@ import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity }
     from 'react-native';
 
 const { height, width } = Dimensions.get('window');
-const imageURL = "https://spring-boot-wall-tags.herokuapp.com/adsharingspace/common/images/";
 class ItemPoster extends React.Component {
     _gotoDetail() {
         const { navigation } = this.props;
         const { item } = this.props;
         navigation.navigate('DetailPost', {
             result_post: item,
-            back_history: "Main"
+            back_history: "Main",
+            type_screen: 0
         });
     }
 
@@ -21,7 +21,7 @@ class ItemPoster extends React.Component {
                 <TouchableOpacity onPress={this._gotoDetail.bind(this)}>
                     <View style={styles.item_wrapper}>
                         <View style={{ flex: 5 }}>
-                            <Image source={{uri: imageURL + item.imageUrl}} style={styles.img_style} />
+                            <Image source={{uri: item.imageUrl}} style={styles.img_style} />
                         </View>
                         <View style={{ flex: 5, marginLeft: 10, padding: 10 }}>
                             <Text style={styles.item_textStyle}>{item.wallType[0].type}</Text>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
     },
     item_textStyle: {
-        height: (height * 0.2) / 4,
+        height: (height * 0.2) / 3.8,
         justifyContent: 'center'
     },
     item_price: {

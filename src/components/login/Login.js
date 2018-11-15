@@ -1,10 +1,9 @@
 import React from 'react';
 import {
-  Text, View, TextInput, Linking,
+  Text, View, TextInput, AsyncStorage,
   StyleSheet, TouchableOpacity,
   SafeAreaView, KeyboardAvoidingView, ImageBackground
-}
-  from 'react-native';
+} from 'react-native';
 
 const bg = require('../images/new-bg.png');
 export default class Login extends React.Component {
@@ -37,9 +36,7 @@ export default class Login extends React.Component {
       .then((responseJson) => {
         if (responseJson.success == true) {
           this.setState({ token: responseJson.data.id });
-          alert(this.state.token);
-          // luu token vao AsynStore
-          this.setState({ user_name: "", password: "" })
+          AsyncStorage.setItem('@id_user', JSON.stringify(this.state.token));
           this.props.navigation.navigate('Main');
         } else {
           alert(`Tai khoan nhap chua dung!`);

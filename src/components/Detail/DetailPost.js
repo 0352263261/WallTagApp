@@ -11,15 +11,16 @@ const pic1 = require('../../components/images/pic1.jpg');
 export default class DetailPost extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             post: this.props.navigation.state.params.result_post,
-            screen: this.props.navigation.state.params.back_history
+            screen: this.props.navigation.state.params.back_history,
+            type_screen: this.props.navigation.state.params.type_screen
         }
     }
 
     _handleContact() {
-        alert(`Lien he`);
+        this.props.navigation.navigate('Contact');
     }
 
     _gotoHome() {
@@ -27,20 +28,96 @@ export default class DetailPost extends React.Component {
     }
 
     _savePoster() {
-        alert(`Đã lưu Poster`);
+        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite?id_place=" + this.state.post.id, {
+            "method": "PUT",
+            headers: {
+                'Authorization': 10000,
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.success === true) {
+                    alert(`Đã lưu Poster`);
+                } else {
+                    alert(`Có lỗi xảy ra!`);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    _removePosterSaved(){
+        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite?id_place=" + this.state.post.id, {
+            "method": "DELETE",
+            headers: {
+                'Authorization': 10000,
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.success === true) {
+                    alert(`Đã xoá Poster`);
+                    this._gotoHome();
+                } else {
+                    alert(`Có lỗi xảy ra!`);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     render() {
         console.log(this.state);
+
+        const detailFromSaved = (
+            <View style={styles.btnWrapperStyle}>
+                <TouchableOpacity style={styles.btnSaveStyle} onPress={this._removePosterSaved.bind(this)}>
+                    <View>
+                        <Text style={{ color: '#212121', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Bỏ lưu</Text>
+                    </View>
+                </TouchableOpacity>
+                <View></View>
+                <TouchableOpacity style={styles.btnContactStyle} onPress={this._handleContact.bind(this)}>
+                    <View>
+                        <Text style={{ color: '#FFF', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Liên hệ</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        );
+
+        const detailFromMain = (
+            <View style={styles.btnWrapperStyle}>
+                <TouchableOpacity style={styles.btnSaveStyle} onPress={this._savePoster.bind(this)}>
+                    <View>
+                        <Text style={{ color: '#212121', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Lưu</Text>
+                    </View>
+                </TouchableOpacity>
+                <View></View>
+                <TouchableOpacity style={styles.btnContactStyle} onPress={this._handleContact.bind(this)}>
+                    <View>
+                        <Text style={{ color: '#FFF', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Liên hệ</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        );
+
+        const detailSelected = this.state.type_screen === 0 ? detailFromMain: detailFromSaved;
+
         return (
             <View style={styles.container}>
                 <View style={styles.headerStyle}>
-                    <TouchableOpacity style={{justifyContent: 'center'}} onPress={this._gotoHome.bind(this)}>
+                    <TouchableOpacity style={{ justifyContent: 'center' }} onPress={this._gotoHome.bind(this)}>
                         <Icon name="chevron-left" size={20} color="white" />
                     </TouchableOpacity>
-                    <View style={{justifyContent: 'center'}}>
-                        <Text style={styles.titleHeaderStyle}>Chi tiết poster</Text>
-                    </View>                   
+                    <View style={{ justifyContent: 'center' }}>
+                        <Text style={styles.titleHeaderStyle}>Thông tin chi tiết</Text>
+                    </View>
                     <View></View>
                 </View>
 
@@ -48,13 +125,13 @@ export default class DetailPost extends React.Component {
                     <View style={{ flex: 1 }}>
                         <Swiper showsButtons scrollEnabled={false}>
                             <View>
-                                <Image source={pic2} style={styles.imageStyle} />
+                                <Image source={{ uri: this.state.post.imageUrl }} style={styles.imageStyle} />
                             </View>
                             <View>
-                                <Image source={pic1} style={styles.imageStyle} />
+                                <Image source={{ uri: this.state.post.imageUrl }} style={styles.imageStyle} />
                             </View>
                             <View>
-                                <Image source={pic2} style={styles.imageStyle} />
+                                <Image source={{ uri: this.state.post.imageUrl }} style={styles.imageStyle} />
                             </View>
                         </Swiper>
                     </View>
@@ -73,29 +150,13 @@ export default class DetailPost extends React.Component {
                 </View>
 
                 <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>Kích thước: {this.state.post.width * this.state.post.height}</Text>
-                </View>
-
-                <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>Giá: {this.state.post.price.text} {this.state.post.price.unit}</Text>
+                    <Text style={styles.textStyle}>Kích thước: {this.state.post.width * this.state.post.height}m2</Text>
                 </View>
 
                 <Text style={{ textAlign: 'right', marginRight: 10, fontFamily: 'Regular', fontStyle: 'italic' }}>Tổng phí</Text>
-                <Text style={styles.textPriceStyle}>1,000,000 VND</Text>
+                <Text style={styles.textPriceStyle}>{this.state.post.price.text} {this.state.post.price.unit}</Text>
+                {detailSelected}
 
-                <View style={styles.btnWrapperStyle}>
-                    <TouchableOpacity style={styles.btnSaveStyle} onPress={this._savePoster.bind(this)}>
-                        <View>
-                            <Text style={{ color: '#212121', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Lưu</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <View></View>
-                    <TouchableOpacity style={styles.btnContactStyle} onPress={this._handleContact.bind(this)}>
-                        <View>
-                            <Text style={{ color: '#FFF', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Liên hệ</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
             </View>
         );
     }
