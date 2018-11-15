@@ -73,11 +73,11 @@ export default class DetailPost extends React.Component {
                 </View>
 
                 <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>{this.state.post.width * this.state.post.height}</Text>
+                    <Text style={styles.textStyle}>Kích thước: {this.state.post.width * this.state.post.height}</Text>
                 </View>
 
                 <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>{this.state.post.price.text}</Text>
+                    <Text style={styles.textStyle}>Giá: {this.state.post.price.text} {this.state.post.price.unit}</Text>
                 </View>
 
                 <Text style={{ textAlign: 'right', marginRight: 10, fontFamily: 'Regular', fontStyle: 'italic' }}>Tổng phí</Text>

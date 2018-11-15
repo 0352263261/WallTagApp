@@ -29,8 +29,8 @@ class ItemPoster extends React.Component {
                             {/* <Image source={pic2} style={{width: img_width, height: img_height}}/> */}
                         </View>
                         <View style={{ flex: 5, marginLeft: 10, padding: 10, justifyContent: 'space-between' }}>
-                            <Text style={styles.item_textStyle}>{item.wallType}</Text>
-                            <Text style={styles.item_textStyle}>{item.posterType}</Text>
+                            <Text style={styles.item_textStyle}>{item.wallType[0].type}</Text>
+                            <Text style={styles.item_textStyle}>{item.posterType[0].type}</Text>
                             <Text style={styles.item_textStyle}>Kích thước: {item.width * item.height} m2</Text>
                             <Text style={styles.item_price}>Giá: {item.price.text}</Text>
                         </View>

@@ -16,38 +16,44 @@ export default class Register extends Component {
     };
   }
 
+  //TODO: Chinh lai height o nhap, progressbar khi dang ky
   _handleRegister() {
-    if (this.state.password === this.state.confirmPass) {
-      fetch("https://spring-boot-wall-tags.herokuapp.com/adsharingspace/auth/register", {
-        "method": "POST",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          'emailOrPhone': this.state.email,
-          'password': this.state.password
-        })
-      })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          if (responseJson.success == true) {
-            alert(`Dang ky thanh cong`);
-            this.props.navigation.navigate('Login');
-          } else {
-            alert(`Tai khoan da ton tai!`);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        })
+    if (this.state.email === "" || this.state.password === "" || this.state.confirmPass === "") {
+      alert(`Không được rỗng!`);
     } else {
-      alert('Mat khau chua dung!');
+      if (this.state.password === this.state.confirmPass) {
+        fetch("https://spring-boot-wall-tags.herokuapp.com/adsharingspace/auth/register", {
+          "method": "POST",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            'emailOrPhone': this.state.email,
+            'password': this.state.password
+          })
+        })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            if (responseJson.success == true) {
+              alert(`Dang ky thanh cong`);
+              this._back_login();
+            } else {
+              alert(`Tai khoan da ton tai!`);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      } else {
+        alert('Mat khau chua dung!');
+      }
     }
   }
 
   _back_login() {
-    this.props.navigation.navigate('Login');
+    const {navigation} = this.props;
+    navigation.navigate('Login');
   }
 
   render() {
@@ -109,7 +115,7 @@ export default class Register extends Component {
         </KeyboardAvoidingView>
 
         <View style={styles.registerButtonStyle}>
-          <TouchableOpacity onPress={() => navigate('Register')} style={styles.buttonStyle}>
+          <TouchableOpacity onPress={this._handleRegister.bind(this)} style={styles.buttonStyle}>
             <Text style={styles.textStyle}>
               Đăng ký
             </Text>
@@ -154,7 +160,7 @@ const styles = {
     paddingLeft: 10,
     marginTop: 10,
     backgroundColor: '#FFFFFF',
-    fontSize: 17
+    fontSize: 14
   },
   headerStyles: {
     padding: 10,

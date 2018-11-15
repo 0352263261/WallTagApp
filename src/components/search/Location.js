@@ -22,8 +22,8 @@ export default class Location extends React.Component {
             input_location: '',
             input_m2: '',
             input_price: '',
-            data: '',
-            detail: '',
+            lat: '',
+            lng: '',
             checkBoxs1: [
                 { id: 10000, name: 'Poster dán tường' },
                 { id: 10001, name: 'Poster vẽ tường' },
@@ -56,8 +56,8 @@ export default class Location extends React.Component {
     }
 
     _handleSearching = (navigate) => {
-        var values_array = "lat=20.979732&lng=105.787902&id_poster=";
-        // this.state.input_location === '' ? values_array+"" : values_array + this.state.input_location;
+
+        var values_array = "lat=" + this.state.lat + "&lng=" + this.state.lng + "&id_poster=";
         this.state.checkBoxs1.forEach(i => {
             if (i.checked === true) {
                 console.log('true', i);
@@ -71,8 +71,7 @@ export default class Location extends React.Component {
             }
         });
         values_array += "&" + this.state.input_price;
-        console.log(this.state.search_style);
-        // this.state.input_price === '' ? values_array.push("") : values_array.push(this.state.input_price);
+        console.log(values_array);
         navigate('ResultSearch', { input_search: values_array })
         return;
     }
@@ -137,7 +136,7 @@ export default class Location extends React.Component {
             <SafeAreaView>
                 <View style={styles.headerStyle}>
                     <TouchableOpacity onPress={this._gotoHome.bind(this)}>
-                        <Icon name="long-arrow-left" size={25} color="white" />
+                        <Icon name="chevron-left" size={20} color="white" />
                     </TouchableOpacity>
                     <Text style={styles.titleStyle}>WallTag</Text>
                     <View />
@@ -147,26 +146,30 @@ export default class Location extends React.Component {
                     <Container style={styles.containerStyle}>
                         <Content>
                             <GooglePlacesAutocomplete
-                                placeholder='Search'
+                                placeholder='Tìm kiếm địa chỉ'
+                                listViewDisplayed={false}
                                 minLength={2}
                                 autoFocus={false}
-                                returnKeyType={'search'}
-                                listViewDisplayed='auto'
+                                returnKeyType={"search"}
                                 fetchDetails={true}
                                 renderDescription={row => row.description}
                                 onPress={(data, details = null) => {
-                                    console.log(data, details);
-                                    this.setState({ data: data });
-                                    this.setState({ detail: details });
-
+                                    this.setState({
+                                        lat: (details && details.geometry && details.geometry.location) ? details.geometry.location.lat : 0,
+                                        lng: (details && details.geometry && details.geometry.location) ? details.geometry.location.lng : 0
+                                    }, () => {
+                                        console.log(data, details);
+                                    });
                                 }}
-
-                                getDefaultValue={() => ''}
+                                getDefaultValue={() => ""}
 
                                 query={{
-                                    key: 'AIzaSyCgD9kYZrWSpOyastga8co513G7G58_TGg',
-                                    language: 'vi',
-                                    types: '(cities)'
+                                    key: "AIzaSyCVN4Odh0FXwr2Q-ZkVOai2dzPz18AYWBs",
+                                    language: "vi",
+                                    types: "address",
+                                    location: "20.984019, 105.794699",
+                                    radius: 50000,
+                                    strictbounds: true
                                 }}
 
                                 styles={{
@@ -181,15 +184,17 @@ export default class Location extends React.Component {
                                         shadowOpacity: 0.3,
                                     },
                                 }}
+                                currentLocation={false}
+                                currentLocationLabel="Vị trí hiện tại"
                                 nearbyPlacesAPI='GooglePlacesSearch'
-                                GoogleReverseGeocodingQuery={{
-                                }}
+                                GoogleReverseGeocodingQuery={{}}
                                 GooglePlacesSearchQuery={{
-                                    rankby: 'distance',
-                                    types: 'food'
+                                    rankby: "distance",
+                                    types: "food"
                                 }}
+                                debounce={200}
 
-                                filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
+                                // filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
                                 debounce={200}
                                 renderLeftButton={() => <Icon name="search" size={18} style={{ marginLeft: 15, justifyContent: 'center', marginTop: 10 }} />}
                             />
