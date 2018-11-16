@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     },
     searchStyle: {
         width: width - 40,
-        height: 48,
+        height: 40,
         alignItems: 'center',
         backgroundColor: '#FFF',
         flexDirection: 'row',

@@ -6,8 +6,6 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Swiper from 'react-native-swiper';
 
 const { height, width } = Dimensions.get('window');
-const pic2 = require('../../components/images/pic2.jpg');
-const pic1 = require('../../components/images/pic1.jpg');
 export default class DetailPost extends React.Component {
     constructor(props) {
         super(props);
@@ -47,9 +45,11 @@ export default class DetailPost extends React.Component {
             .catch((error) => {
                 console.error(error);
             });
+        // const { add_poster } = this.props.navigation.state.params;
+        // add_poster(this.state.post);
     }
 
-    _removePosterSaved(){
+    _removePosterSaved() {
         fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite?id_place=" + this.state.post.id, {
             "method": "DELETE",
             headers: {
@@ -70,11 +70,11 @@ export default class DetailPost extends React.Component {
             .catch((error) => {
                 console.error(error);
             });
+        const { remove_item_poster } = this.props.navigation.state.params;
+        remove_item_poster(this.state.post.id)
     }
 
     render() {
-        console.log(this.state);
-
         const detailFromSaved = (
             <View style={styles.btnWrapperStyle}>
                 <TouchableOpacity style={styles.btnSaveStyle} onPress={this._removePosterSaved.bind(this)}>
@@ -107,7 +107,7 @@ export default class DetailPost extends React.Component {
             </View>
         );
 
-        const detailSelected = this.state.type_screen === 0 ? detailFromMain: detailFromSaved;
+        const detailSelected = this.state.type_screen === 0 ? detailFromMain : detailFromSaved;
 
         return (
             <View style={styles.container}>

@@ -36,7 +36,7 @@ export default class Login extends React.Component {
       .then((responseJson) => {
         if (responseJson.success == true) {
           this.setState({ token: responseJson.data.id });
-          AsyncStorage.setItem('@id_user', JSON.stringify(this.state.token));
+          AsyncStorage.setItem('@user', JSON.stringify(responseJson.data));
           this.props.navigation.navigate('Main');
         } else {
           alert(`Tai khoan nhap chua dung!`);

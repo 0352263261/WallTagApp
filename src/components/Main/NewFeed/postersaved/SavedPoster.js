@@ -9,10 +9,14 @@ class ItemPoster extends React.Component {
     _gotoDetail() {
         const { navigation } = this.props;
         const { item } = this.props;
+        const { remove_item_poster } = this.props;
+        const { add_poster } = this.props;
         navigation.navigate('DetailPost', {
             result_post: item,
             back_history: "Main",
-            type_screen: 1
+            type_screen: 1,
+            remove_item_poster: remove_item_poster,
+            add_poster: add_poster
         });
     }
 
@@ -46,8 +50,8 @@ export default class SavedPoster extends React.Component {
     }
 
     componentDidMount() {
-        const id_user = AsyncStorage.getItem('@id_user');
-        alert(id_user);
+        // const user = AsyncStorage.getItem('@user');
+        // alert(JSON.parse(user));
         //TODO: Lay data. ID user
         fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite", {
             "method": "GET",
@@ -70,6 +74,22 @@ export default class SavedPoster extends React.Component {
             });
     }
 
+    //TODO: Con phan tu cuoi cung.
+    _remove_item_poster = (id_poster) => {
+        for (let i = 0; i < this.state.listPosts.length; i++) {
+            if (this.state.listPosts[i].id === id_poster) {
+                this.state.listPosts.splice(i, 1);
+                break;
+            }
+        }
+        this.setState({ listPosts: this.state.listPosts });
+    }
+
+    _add_poster = (poster) => {
+        this.state.listPosts.push(poster);
+        this.setState({ listPosts: this.setState.listPosts });
+    }
+
     _back_new_feed() {
         this.props.navigation.navigate('Main');
     }
@@ -87,6 +107,8 @@ export default class SavedPoster extends React.Component {
                         renderItem={({ item, index }) => {
                             return (<ItemPoster
                                 navigation={navigation}
+                                remove_item_poster={this._remove_item_poster}
+                                add_poster={this._add_poster}
                                 item={item}
                             />);
                         }}
@@ -134,7 +156,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         color: '#FF3D00'
     },
-    img_style:{
+    img_style: {
         width: (height * 0.2) + 30,
         height: height * 0.2
     },
