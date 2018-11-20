@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity }
+import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, ScrollView, RefreshControl }
     from 'react-native';
 
 const { height, width } = Dimensions.get('window');
@@ -9,8 +9,7 @@ class ItemPoster extends React.Component {
         const { item } = this.props;
         navigation.navigate('DetailPost', {
             result_post: item,
-            back_history: "Main",
-            type_screen: 0
+            back_history: "Main"
         });
     }
 
@@ -21,7 +20,7 @@ class ItemPoster extends React.Component {
                 <TouchableOpacity onPress={this._gotoDetail.bind(this)}>
                     <View style={styles.item_wrapper}>
                         <View style={{ flex: 5 }}>
-                            <Image source={{uri: item.imageUrl}} style={styles.img_style} />
+                            <Image source={{ uri: item.imageUrl }} style={styles.img_style} />
                         </View>
                         <View style={{ flex: 5, marginLeft: 10, padding: 10 }}>
                             <Text style={styles.item_textStyle}>{item.wallType[0].type}</Text>
@@ -40,7 +39,8 @@ export default class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            listPosts: []
+            listPosts: [],
+            refreshing: false
         };
     }
 
@@ -56,7 +56,11 @@ export default class Home extends React.Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 if (responseJson.success == true) {
-                    this.setState({ listPosts: responseJson.data });
+                    posts = responseJson.data.map((item, i) => {
+                        item.saved = false;
+                        return item;
+                    })
+                    this.setState({ listPosts: posts });
                 } else {
                     alert(`Type poster is empty`);
                 }
@@ -66,6 +70,13 @@ export default class Home extends React.Component {
             });
     }
 
+    _onRefreshPostList = () => {
+        this.setState({ refreshing: true });
+        fetchData().then(() => {
+            this.setState({ refreshing: false });
+        });
+    }
+
     render() {
         const { navigation } = this.props;
         return (
@@ -73,7 +84,15 @@ export default class Home extends React.Component {
                 <View style={styles.headerStyles}>
                     <Text style={styles.textTitleStyle}>Poster nổi bật</Text>
                 </View>
-                <View style={{ marginBottom: 35 }}>
+                <ScrollView style={{ marginBottom: 35 }}
+
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh}
+                        />
+                    }
+                >
                     <FlatList
                         data={this.state.listPosts}
                         renderItem={({ item, index }) => {
@@ -84,7 +103,7 @@ export default class Home extends React.Component {
                         }}
                         keyExtractor={(item, index) => `${item.id}`}
                     />
-                </View>
+                </ScrollView>
             </View>
         );
     }
@@ -106,7 +125,7 @@ const styles = StyleSheet.create({
         color: '#F44336',
         fontStyle: 'italic'
     },
-    img_style:{
+    img_style: {
         width: (height * 0.2) + 30,
         height: height * 0.2
     },

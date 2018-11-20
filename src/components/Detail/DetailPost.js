@@ -12,8 +12,8 @@ export default class DetailPost extends React.Component {
 
         this.state = {
             post: this.props.navigation.state.params.result_post,
-            screen: this.props.navigation.state.params.back_history,
-            type_screen: this.props.navigation.state.params.type_screen
+            back_history: this.props.navigation.state.params.back_history,
+            callback: this.props.navigation.state.params.callback
         }
     }
 
@@ -21,13 +21,20 @@ export default class DetailPost extends React.Component {
         this.props.navigation.navigate('Contact');
     }
 
-    _gotoHome() {
-        this.props.navigation.navigate(this.state.screen);
+    _handleBack() {
+        this.props.navigation.navigate(this.state.back_history);
     }
 
-    _savePoster() {
+    _changePostStatus = () => {
+        newPost = this.state.post
+        newPost.saved = !this.state.post.saved
+        if (newPost.saved) {
+            method = "PUT"
+        } else {
+            method = "DELETE"
+        }
         fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite?id_place=" + this.state.post.id, {
-            "method": "PUT",
+            "method": method,
             headers: {
                 'Authorization': 10000,
                 "Accept": "application/json",
@@ -37,7 +44,15 @@ export default class DetailPost extends React.Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 if (responseJson.success === true) {
-                    alert(`Đã lưu Poster`);
+                    this.setState({ post: newPost })
+                    if (newPost.saved) {
+                        alert("Da them thanh cong")
+                    } else {
+                        alert("Da xoa thanh cong")
+                        if (this.state.callback !== undefined) {
+                            this.state.callback(newPost, "action_remove")
+                        }
+                    }
                 } else {
                     alert(`Có lỗi xảy ra!`);
                 }
@@ -45,41 +60,16 @@ export default class DetailPost extends React.Component {
             .catch((error) => {
                 console.error(error);
             });
-        // const { add_poster } = this.props.navigation.state.params;
-        // add_poster(this.state.post);
-    }
-
-    _removePosterSaved() {
-        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite?id_place=" + this.state.post.id, {
-            "method": "DELETE",
-            headers: {
-                'Authorization': 10000,
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson.success === true) {
-                    alert(`Đã xoá Poster`);
-                    this._gotoHome();
-                } else {
-                    alert(`Có lỗi xảy ra!`);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-        const { remove_item_poster } = this.props.navigation.state.params;
-        remove_item_poster(this.state.post.id)
     }
 
     render() {
-        const detailFromSaved = (
+        const detail = (
             <View style={styles.btnWrapperStyle}>
-                <TouchableOpacity style={styles.btnSaveStyle} onPress={this._removePosterSaved.bind(this)}>
+                <TouchableOpacity style={styles.btnSaveStyle} onPress={this._changePostStatus.bind(this)}>
                     <View>
-                        <Text style={{ color: '#212121', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Bỏ lưu</Text>
+                        <Text style={{ color: '#212121', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>
+                            {this.state.post.saved === true ? "Bỏ lưu" : "Lưu"}
+                        </Text>
                     </View>
                 </TouchableOpacity>
                 <View></View>
@@ -91,28 +81,12 @@ export default class DetailPost extends React.Component {
             </View>
         );
 
-        const detailFromMain = (
-            <View style={styles.btnWrapperStyle}>
-                <TouchableOpacity style={styles.btnSaveStyle} onPress={this._savePoster.bind(this)}>
-                    <View>
-                        <Text style={{ color: '#212121', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Lưu</Text>
-                    </View>
-                </TouchableOpacity>
-                <View></View>
-                <TouchableOpacity style={styles.btnContactStyle} onPress={this._handleContact.bind(this)}>
-                    <View>
-                        <Text style={{ color: '#FFF', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Liên hệ</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-        );
-
-        const detailSelected = this.state.type_screen === 0 ? detailFromMain : detailFromSaved;
+        const detailSelected = detail;
 
         return (
             <View style={styles.container}>
                 <View style={styles.headerStyle}>
-                    <TouchableOpacity style={{ justifyContent: 'center' }} onPress={this._gotoHome.bind(this)}>
+                    <TouchableOpacity style={{ justifyContent: 'center' }} onPress={this._handleBack.bind(this)}>
                         <Icon name="chevron-left" size={20} color="white" />
                     </TouchableOpacity>
                     <View style={{ justifyContent: 'center' }}>

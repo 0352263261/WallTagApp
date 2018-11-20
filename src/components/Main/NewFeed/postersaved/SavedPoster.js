@@ -1,30 +1,27 @@
 import React from 'react';
-import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, AsyncStorage }
+import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, AsyncStorage, RefreshControl, ScrollView }
     from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 const { height, width } = Dimensions.get('window');
 
 class ItemPoster extends React.Component {
-    _gotoDetail() {
-        const { navigation } = this.props;
-        const { item } = this.props;
-        const { remove_item_poster } = this.props;
-        const { add_poster } = this.props;
-        navigation.navigate('DetailPost', {
-            result_post: item,
-            back_history: "Main",
-            type_screen: 1,
-            remove_item_poster: remove_item_poster,
-            add_poster: add_poster
-        });
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            item: this.props.item,
+            index: this.props.index,
+            onClick: this.props.onClick
+        }
     }
 
     render() {
-        const { item } = this.props;
+        const item = this.state.item
+        const index = this.state.index
         return (
             <View>
-                <TouchableOpacity onPress={this._gotoDetail.bind(this)}>
+                <TouchableOpacity onPress={() => this.state.onClick(item, index)}>
                     <View style={styles.item_wrapper}>
                         <View style={{ backgroundColor: 'red', flex: 5 }}>
                             <Image source={{ uri: item.imageUrl }} style={styles.img_style} />
@@ -45,7 +42,8 @@ export default class SavedPoster extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            listPosts: []
+            listPosts: [],
+            refreshing: false
         };
     }
 
@@ -53,6 +51,7 @@ export default class SavedPoster extends React.Component {
         // const user = AsyncStorage.getItem('@user');
         // alert(JSON.parse(user));
         //TODO: Lay data. ID user
+
         fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite", {
             "method": "GET",
             headers: {
@@ -64,7 +63,11 @@ export default class SavedPoster extends React.Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 if (responseJson.success === true) {
-                    this.setState({ listPosts: responseJson.data });
+                    posts = responseJson.data.map((item, i) => {
+                        item.saved = true;
+                        return item;
+                    })
+                    this.setState({ listPosts: posts });
                 } else {
                     alert(`Có lỗi xảy ra!`);
                 }
@@ -75,29 +78,60 @@ export default class SavedPoster extends React.Component {
     }
 
     //TODO: Con phan tu cuoi cung.
-    _remove_item_poster = (id_poster) => {
-        for (let i = 0; i < this.state.listPosts.length; i++) {
-            if (this.state.listPosts[i].id === id_poster) {
-                this.state.listPosts.splice(i, 1);
-                break;
-            }
+    updateItem = (item, action) => {
+        if (action === "action_remove") {
+            posts = this.state.listPosts.filter(element => element.id !== item.id)
         }
-        this.setState({ listPosts: this.state.listPosts });
+        this.setState({ listPosts: posts });
     }
 
-    _add_poster = (poster) => {
-        this.state.listPosts.push(poster);
-        this.setState({ listPosts: this.setState.listPosts });
+    _handleClick = (item, index) => {
+        this.props.navigation.navigate('DetailPost', {
+            result_post: item,
+            back_history: "Main",
+            callback: this.updateItem
+        });
     }
 
-    _back_new_feed() {
-        this.props.navigation.navigate('Main');
+    _onRefreshUpdatePost = () => {
+        this.setState({refreshing: true});
+        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite", {
+            "method": "GET",
+            headers: {
+                'Authorization': 10000,
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.success === true) {
+                    posts = responseJson.data.map((item, i) => {
+                        item.saved = true;
+                        return item;
+                    })
+                    this.setState({ listPosts: posts });
+                } else {
+                    alert(`Có lỗi xảy ra!`);
+                }
+                this.setState({refreshing: false});
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     render() {
-        const { navigation } = this.props;
         return (
-            <View style={styles.container}>
+            <ScrollView
+                style={styles.container}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={this._onRefreshUpdatePost}
+                    />
+                }
+            >
                 <View style={styles.headerStyles}>
                     <Text style={styles.textTitleStyle}>Poster đã lưu</Text>
                 </View>
@@ -106,16 +140,15 @@ export default class SavedPoster extends React.Component {
                         data={this.state.listPosts}
                         renderItem={({ item, index }) => {
                             return (<ItemPoster
-                                navigation={navigation}
-                                remove_item_poster={this._remove_item_poster}
-                                add_poster={this._add_poster}
                                 item={item}
+                                index={index}
+                                onClick={this._handleClick}
                             />);
                         }}
                         keyExtractor={(item, index) => `${item.id}`}
                     />
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 }
