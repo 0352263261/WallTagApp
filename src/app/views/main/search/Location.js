@@ -7,8 +7,8 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { Container, Body, ListItem, Left, Right, CheckBox, Content, List, View } from 'native-base';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
-const ic_search = require('../images/ic_search.png');
-const tim_kiem = require('../images/tim_kiem.png');
+const ic_search = require('../../../images/ic_search.png');
+const tim_kiem = require('../../../images/tim_kiem.png');
 const { width, height } = Dimensions.get('window');
 
 const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } } };

@@ -5,7 +5,9 @@ import {
   SafeAreaView, KeyboardAvoidingView, ImageBackground
 } from 'react-native';
 
-const bg = require('../images/new-bg.png');
+import apiManager from "../../controller/APIManager";
+
+const bg = require('../../images/new-bg.png');
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -16,35 +18,22 @@ export default class Login extends React.Component {
     };
   }
 
-  componentDidMount() {
+  _onPressLogin() {
+    apiManager.login(this.state.user_name, this.state.password, this.loginCallback)
   }
 
-  _onPressLogin() {
-    // this.props.navigation.navigate('Main');
-    fetch("https://spring-boot-wall-tags.herokuapp.com/adsharingspace/auth/login", {
-      "method": "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        'phoneOrEmail': this.state.user_name,
-        'password': this.state.password
-      })
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.success == true) {
-          this.setState({ token: responseJson.data.id });
-          AsyncStorage.setItem('@user', JSON.stringify(responseJson.data));
-          this.props.navigation.navigate('Main');
-        } else {
-          alert(`Tai khoan nhap chua dung!`);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  loginCallback = (responseJson) => {
+    if (responseJson === undefined){
+      alert(`Vui lòng kiểm tra lại tài khoản`);
+      return;
+    }
+    if(responseJson.success === true){
+      this.setState({ token: responseJson.data.id });
+      alert(this.state.token)
+      this.props.navigation.navigate('Main');
+    }else{
+      alert(`Tài khoản nhập chưa đúng!`);
+    }
   }
 
   render() {

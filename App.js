@@ -1,24 +1,22 @@
 
 import React, { Component } from "react";
 import { createStackNavigator } from "react-navigation";
-import DetailPost from "./src/components/Detail/DetailPost";
-import Location from "./src/components/search/Location";
-import Login from "./src/components/login/Login";
-import Register from "./src/components/register/Register";
-import Main from "./src/components/Main/Main";
-import Authentication from "./src/components/Authentication/Authentication";
-import History from "./src/components/History/History";
-import Changeinfo from "./src/components/ChangeInfo/ChangeInfo";
-import NewFeed from "./src/components/Main/NewFeed/NewFeed";
-import ResultSearch from "./src/components/search/ResultSearch";
-import Approve from "./src/components/approve/Approve";
+import DetailPost from "./src/app/views/main/detailposter/DetailPost";
+import Location from "./src/app/views/main/search/Location";
+import Login from "./src/app/views/login/Login";
+import Register from "./src/app/views/register/Register";
+import Main from "./src/app/views/main/Main";
+import Authentication from "./src/app/views/main/authentication/Authentication";
+import Changeinfo from "./src/app/views/main/changeInfo/ChangeInfo";
+import NewFeed from "./src/app/views/main/pager/NewFeed";
+import ResultSearch from "./src/app/views/main/search/ResultSearch";
+import Approve from "./src/app/views/main/approve/Approve";
 
 const MyStack = createStackNavigator({
   Login: {screen: Login},
   Register: {Register},
   Main: { screen: Main },
   Authentication: { screen: Authentication },
-  History: { screen: History },
   Changeinfo: {screen: Changeinfo},
   Location: {screen: Location},
   DetailPost: {screen: DetailPost},

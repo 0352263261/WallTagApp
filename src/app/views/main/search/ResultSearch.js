@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 const { height, width } = Dimensions.get('window');
 const img_height = height * 0.2;
 const img_width = (img_height * 500) / 300;
-const pic2 = require('../../components/images/pic2.jpg');
 
 class ItemPoster extends React.Component {
     _gotoDetail() {

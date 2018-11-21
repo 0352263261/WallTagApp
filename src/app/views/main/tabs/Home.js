@@ -84,7 +84,7 @@ export default class Home extends React.Component {
                 <View style={styles.headerStyles}>
                     <Text style={styles.textTitleStyle}>Poster nổi bật</Text>
                 </View>
-                <ScrollView style={{ marginBottom: 35 }}
+                <ScrollView
 
                     refreshControl={
                         <RefreshControl

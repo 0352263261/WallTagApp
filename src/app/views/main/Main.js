@@ -1,6 +1,6 @@
 import React from 'react';
-import Menu from "./Menu";
-import NewFeed from "./NewFeed/NewFeed";
+import Menu from "./drawer/Menu";
+import NewFeed from "../main/pager/NewFeed";
 import Drawer from 'react-native-drawer'
 
 export default class Main extends React.Component {

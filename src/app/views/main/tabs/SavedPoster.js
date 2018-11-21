@@ -77,7 +77,6 @@ export default class SavedPoster extends React.Component {
             });
     }
 
-    //TODO: Con phan tu cuoi cung.
     updateItem = (item, action) => {
         if (action === "action_remove") {
             posts = this.state.listPosts.filter(element => element.id !== item.id)
@@ -112,7 +111,7 @@ export default class SavedPoster extends React.Component {
                     })
                     this.setState({ listPosts: posts });
                 } else {
-                    alert(`Có lỗi xảy ra!`);
+                    alert(`Poster đã lưu!`);
                 }
                 this.setState({refreshing: false});
             })

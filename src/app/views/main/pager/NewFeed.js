@@ -3,12 +3,12 @@ import { View }
     from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import TabNavigator from 'react-native-tab-navigator';
-import Home from "./Home/Home";
-import Contact from "./Contact/Contact";
-import SavedPoster from "./postersaved/SavedPoster";
-import Notification from "./Notification/Notification";
-import Header from "../Header";
-import SearchAround from "./searcharound/SearchAround";
+import Home from "../tabs/Home";
+import Contact from "../tabs/Contact";
+import SavedPoster from "../tabs/SavedPoster";
+import Notification from "../tabs/Notification";
+import Header from "../header/Header";
+import SearchAround from "../tabs/SearchAround";
 
 export default class NewFeed extends React.Component {
     constructor(props) {
