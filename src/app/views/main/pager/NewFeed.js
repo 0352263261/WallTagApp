@@ -27,7 +27,7 @@ export default class NewFeed extends React.Component {
         return (
             <View style={{ flex: 1 }}>
                 <Header onOpen={this._openMenu.bind(this)} navigation={navigation} />
-                <TabNavigator>
+                <TabNavigator tabBarStyle={{backgroundColor: '#BDBDBD',}}>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'home'}
                         title="Trang chủ"

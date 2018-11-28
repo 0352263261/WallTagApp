@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, AsyncStorage, RefreshControl, ScrollView }
     from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import apiManager from "../../../controller/APIManager"
 
 const { height, width } = Dimensions.get('window');
 
@@ -48,33 +49,7 @@ export default class SavedPoster extends React.Component {
     }
 
     componentDidMount() {
-        // const user = AsyncStorage.getItem('@user');
-        // alert(JSON.parse(user));
-        //TODO: Lay data. ID user
-
-        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite", {
-            "method": "GET",
-            headers: {
-                'Authorization': 10000,
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson.success === true) {
-                    posts = responseJson.data.map((item, i) => {
-                        item.saved = true;
-                        return item;
-                    })
-                    this.setState({ listPosts: posts });
-                } else {
-                    alert(`Có lỗi xảy ra!`);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        apiManager.refresh_favorite_poster(this.favoritePosterCallback)
     }
 
     updateItem = (item, action) => {
@@ -93,31 +68,25 @@ export default class SavedPoster extends React.Component {
     }
 
     _onRefreshUpdatePost = () => {
-        this.setState({refreshing: true});
-        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite", {
-            "method": "GET",
-            headers: {
-                'Authorization': 10000,
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson.success === true) {
-                    posts = responseJson.data.map((item, i) => {
-                        item.saved = true;
-                        return item;
-                    })
-                    this.setState({ listPosts: posts });
-                } else {
-                    alert(`Poster đã lưu!`);
-                }
-                this.setState({refreshing: false});
+        this.setState({ refreshing: true });
+        apiManager.refresh_favorite_poster(this.favoritePosterCallback)
+    }
+
+    favoritePosterCallback = (responseJson) => {
+        if (responseJson === undefined) {
+            alert(`Lỗi cập nhật`)
+            return
+        }
+        if (responseJson.success === true) {
+            posts = responseJson.data.map((item, i) => {
+                item.saved = true;
+                return item;
             })
-            .catch((error) => {
-                console.error(error);
-            });
+            this.setState({ listPosts: posts });
+            this.setState({ refreshing: false });
+        } else {
+            alert(`Có lỗi xảy ra!`);
+        }
     }
 
     render() {
@@ -132,7 +101,7 @@ export default class SavedPoster extends React.Component {
                 }
             >
                 <View style={styles.headerStyles}>
-                    <Text style={styles.textTitleStyle}>Poster đã lưu</Text>
+                    <Text style={styles.textTitleStyle}>Địa điểm yêu thích</Text>
                 </View>
                 <View style={{ marginBottom: 35 }}>
                     <FlatList
@@ -158,7 +127,7 @@ const heightImg = (widthImg * 300) / 500 - 30;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#BDBDBD'
+        backgroundColor: '#EEEEEE'
     },
     headerStyles: {
         height: height / 18,
@@ -168,7 +137,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Regular',
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#FFF',
+        color: 'red',
         fontStyle: 'italic'
     },
     item_wrapper: {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, SafeAreaView }
     from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import apiManager from "../../../controller/APIManager";
 
 const { height, width } = Dimensions.get('window');
 const img_height = height * 0.2;
@@ -51,26 +52,20 @@ export default class ResultSearch extends React.Component {
     }
 
     componentDidMount() {
-        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/search?" + this.state.search_style, {
-            "method": "GET",
-            headers: {
-                'Authorization': 10000,
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson.success === true) {
-                    this.setState({ poster_list: responseJson.data });
-                    console.log(this.state.poster_list.length);
-                } else {
-                    alert(`Type poster is empty`);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        apiManager.find_place(this.findPlaceCallback, this.state.search_style)
+    }
+
+    findPlaceCallback = (responseJson) => {
+        if(responseJson === undefined){
+            alert(`Lỗi tìm kiếm`);
+            return
+        }
+        if (responseJson.success === true) {
+            this.setState({ poster_list: responseJson.data });
+            console.log(this.state.poster_list.length);
+        } else {
+            alert(`Không có địa điểm nào`);
+        }
     }
 
     _handleBack() {

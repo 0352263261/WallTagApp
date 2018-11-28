@@ -13,52 +13,52 @@ export default class Header extends React.Component {
         return (
             <View style={styles.wrapper}>
                 <View style={styles.row1}>
-                    <TouchableOpacity style={styles.btnClick1} onPress={this.props.onOpen}>
-                        <Icon name="bars" size={25} color="white" />
-                    </TouchableOpacity>
                     <Text style={styles.title_text}>WallTag</Text>
-                    <TouchableOpacity style={styles.btnClick2}>
-                        <Icon name="cart-plus" size={25} color="white" />
+                </View>
+                <View style={styles.wrapper_search}>
+                    <TouchableOpacity style={styles.btn_drawer_icon} onPress={this.props.onOpen}>
+                        <Icon name="bars" size={30} color="white" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.row2} onPress={this._gotoSearchBar.bind(this)}>
+                        <View style={styles.searchStyle}>
+                            <Icon name="search" size={18} style={{ marginLeft: 15 }} />
+                            <Text style={styles.text_search_style}>Tìm kiếm địa điểm</Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.row2} onPress={this._gotoSearchBar.bind(this)}>
-                    <View style={styles.searchStyle}>
-                        <Icon name="search" size={18} style={{ marginLeft: 15 }} />
-                        <Text style={styles.text_search_style}>Tìm kiếm địa điểm</Text>
-                    </View>
-                </TouchableOpacity>
             </View>
         );
     }
 }
 const styles = StyleSheet.create({
     wrapper: {
-        backgroundColor: '#F44336', height: height / 8
+        backgroundColor: '#F44336', height: height / 9
+    },
+    wrapper_search:{
+        flexDirection: 'row', flex: 10
     },
     row1: {
-        flexDirection: 'row', justifyContent: 'space-between'
+        justifyContent: 'space-between', alignItems: 'center'
     },
     row2: {
-        marginTop: 5, width: width, alignItems: 'center'
+        marginTop: 5, alignItems: 'center', flex: 9
     },
-    btnClick1: {
-        marginLeft: 10, marginTop: 5
-    },
-    btnClick2: {
-        marginRight: 10, marginTop: 5
+
+    btn_drawer_icon: {
+        marginLeft: 10, flex: 1, justifyContent: 'center', alignItems: 'center'
     },
     title_text: {
         marginTop: 5, fontSize: 16, color: 'white', fontFamily: 'Regular', fontWeight: 'bold'
     },
     searchStyle: {
-        width: width - 40,
+        width: width - 70,
         height: 40,
         alignItems: 'center',
         backgroundColor: '#FFF',
         flexDirection: 'row',
         borderRadius: 60
     },
-    text_search_style:{
+    text_search_style: {
         fontSize: 16,
         fontFamily: 'Regular',
         marginLeft: 15,

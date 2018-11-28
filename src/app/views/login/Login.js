@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Text, View, TextInput, AsyncStorage,
+  Text, View, TextInput, AsyncStorage, StatusBar,
   StyleSheet, TouchableOpacity,
   SafeAreaView, KeyboardAvoidingView, ImageBackground
 } from 'react-native';

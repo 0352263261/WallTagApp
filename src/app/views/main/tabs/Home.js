@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, ScrollView, RefreshControl }
     from 'react-native';
+import apiManager from "../../../controller/APIManager";
 
 const { height, width } = Dimensions.get('window');
 class ItemPoster extends React.Component {
@@ -27,6 +28,7 @@ class ItemPoster extends React.Component {
                             <Text style={styles.item_textStyle}>{item.posterType[0].type}</Text>
                             <Text style={styles.item_textStyle}>Kích thước: {item.width * item.height} m2</Text>
                             <Text style={styles.item_price}>Giá: {item.price.text} {item.price.unit}</Text>
+                            <Text style={styles.item_textStyle}>{item.dateCreated}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -45,29 +47,24 @@ export default class Home extends React.Component {
     }
 
     componentDidMount() {
-        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place?category=latest", {
-            "method": "GET",
-            headers: {
-                'Authorization': 10000,
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson.success == true) {
-                    posts = responseJson.data.map((item, i) => {
-                        item.saved = false;
-                        return item;
-                    })
-                    this.setState({ listPosts: posts });
-                } else {
-                    alert(`Type poster is empty`);
-                }
+        apiManager.request_poster(this.getPosterCallBack)
+    }
+
+    getPosterCallBack = (responseJson) => {
+        if (responseJson === undefined) {
+            alert(`Lỗi tải dữ liệu`)
+            return
+        }
+
+        if (responseJson.success === true) {
+            posts = responseJson.data.map((item, i) => {
+                item.saved = false;
+                return item;
             })
-            .catch((error) => {
-                console.error(error);
-            });
+            this.setState({ listPosts: posts });
+        } else {
+            alert(`Không có dữ liệu`)
+        }
     }
 
     _onRefreshPostList = () => {
@@ -112,7 +109,7 @@ export default class Home extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#BDBDBD'
+        backgroundColor: '#EEEEEE'
     },
     headerStyles: {
         height: height / 18,
@@ -131,18 +128,19 @@ const styles = StyleSheet.create({
     },
     item_wrapper: {
         flex: 1,
-        margin: 5,
-        marginBottom: 5,
+        marginTop: 5,
+        marginLeft: 5,
+        marginRight: 5,
         height: height * 0.2,
         flexDirection: 'row',
         backgroundColor: '#FFF',
     },
     item_textStyle: {
-        height: (height * 0.2) / 3.8,
+        height: (height * 0.2) / 5.5,
         justifyContent: 'center'
     },
     item_price: {
-        height: (height * 0.2) / 4,
+        height: (height * 0.2) / 5.5,
         justifyContent: 'center',
         color: '#FF3D00'
     }

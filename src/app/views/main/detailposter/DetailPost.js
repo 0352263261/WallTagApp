@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text, Image, TouchableOpacity, StyleSheet, Dimensions }
+import {View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, ScrollView }
     from 'react-native';
-import { View } from 'native-base';
+import apiManager from "../../../controller/APIManager"
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Swiper from 'react-native-swiper';
 
@@ -33,33 +33,27 @@ export default class DetailPost extends React.Component {
         } else {
             method = "DELETE"
         }
-        fetch("http://spring-boot-wall-tags.herokuapp.com/adsharingspace/place/favorite?id_place=" + this.state.post.id, {
-            "method": method,
-            headers: {
-                'Authorization': 10000,
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson.success === true) {
-                    this.setState({ post: newPost })
-                    if (newPost.saved) {
-                        alert("Da them thanh cong")
-                    } else {
-                        alert("Da xoa thanh cong")
-                        if (this.state.callback !== undefined) {
-                            this.state.callback(newPost, "action_remove")
-                        }
-                    }
-                } else {
-                    alert(`Có lỗi xảy ra!`);
+        apiManager.change_favorite_poster(this.state.post.id, this.changePosterCallBack, method)
+    }
+    changePosterCallBack = (responseJson) => {
+        if (responseJson === undefined) {
+            alert(`Lỗi cập nhật`)
+            return
+        }
+        if (responseJson.success === true) {
+            this.setState({ post: newPost })
+            if (newPost.saved) {
+                alert("Da them thanh cong")
+            } else {
+                alert("Da xoa thanh cong")
+                if (this.state.callback !== undefined) {
+                    this.state.callback(newPost, "action_remove")
                 }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+            }
+        } else {
+            alert(`Poster đã được lưu`);
+        }
+
     }
 
     render() {
@@ -110,24 +104,41 @@ export default class DetailPost extends React.Component {
                         </Swiper>
                     </View>
                 </View>
+                <ScrollView>
+                    <View style={{ marginLeft: 10, marginTop: 0 }}>
+                        <Text style={{ fontFamily: 'Regular', fontSize: 16, fontWeight: 'bold' }}>THÔNG TIN CHI TIẾT</Text>
+                    </View>
 
-                <View style={{ marginLeft: 10, marginTop: 10 }}>
-                    <Text style={{ fontFamily: 'Regular', fontSize: 16, fontWeight: 'bold' }}>THÔNG TIN CHI TIẾT</Text>
-                </View>
+                    <View style={styles.wrapperInfo}>
+                        <Text style={styles.textStyle}>{this.state.post.posterType[0].type}</Text>
+                    </View>
 
-                <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>{this.state.post.posterType[0].type}</Text>
-                </View>
+                    <View style={styles.wrapperInfo}>
+                        <Text style={styles.textStyle}>{this.state.post.wallType[0].type}</Text>
+                    </View>
 
-                <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>{this.state.post.wallType[0].type}</Text>
-                </View>
+                    <View style={styles.wrapperInfo}>
+                        <Text style={styles.textStyle}>Kích thước: {this.state.post.width * this.state.post.height}m2</Text>
+                    </View>
 
-                <View style={styles.wrapperInfo}>
-                    <Text style={styles.textStyle}>Kích thước: {this.state.post.width * this.state.post.height}m2</Text>
-                </View>
+                    <View style={styles.wrapperInfo}>
+                        <Text style={styles.textStyle}>Địa chỉ: {this.state.post.address}</Text>
+                    </View>
 
-                <Text style={{ textAlign: 'right', marginRight: 10, fontFamily: 'Regular', fontStyle: 'italic' }}>Tổng phí</Text>
+                    <View style={styles.wrapperInfo}>
+                        <Text style={styles.textStyle}>Mô tả: {this.state.post.description}</Text>
+                    </View>
+
+                    <View style={styles.wrapperInfo}>
+                        <Text style={styles.textStyle}>Ngày tạo: {this.state.post.dateCreated}</Text>
+                    </View>
+
+                    <View style={styles.wrapperInfo}>
+                        <Text style={styles.textStyle}>Giá thi công: {this.state.post.constructionPrice}</Text>
+                    </View>
+                </ScrollView>
+
+                <Text style={{ textAlign: 'right', marginRight: 15, fontFamily: 'Regular', fontStyle: 'italic' }}>Tổng phí</Text>
                 <Text style={styles.textPriceStyle}>{this.state.post.price.text} {this.state.post.price.unit}</Text>
                 {detailSelected}
 
@@ -142,7 +153,7 @@ const heightImg = (widthImg * 300) / 500;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#BDBDBD',
+        backgroundColor: '#EEEEEE',
         justifyContent: 'space-between'
     },
     headerStyle: {
@@ -166,6 +177,7 @@ const styles = StyleSheet.create({
         height: height * 0.31,
         backgroundColor: '#FFF',
         margin: 10,
+        marginTop: 0,
         shadowColor: '#212121',
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.3,

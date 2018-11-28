@@ -1,5 +1,6 @@
 
 import React, { Component } from "react";
+import { StatusBar } from "react-native";
 import { createStackNavigator } from "react-navigation";
 import DetailPost from "./src/app/views/main/detailposter/DetailPost";
 import Location from "./src/app/views/main/search/Location";
@@ -34,6 +35,9 @@ const MyStack = createStackNavigator({
   });
 
 export default class App extends Component {
+  componentDidMount(){
+    StatusBar.setHidden(true);
+  }
   render() {
     return (
       <MyStack />

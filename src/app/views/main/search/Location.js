@@ -20,7 +20,8 @@ export default class Location extends React.Component {
 
         this.state = {
             input_location: '',
-            input_m2: '',
+            input_width: '',
+            input_height: '',
             input_price: '',
             lat: '',
             lng: '',
@@ -56,7 +57,6 @@ export default class Location extends React.Component {
     }
 
     _handleSearching = (navigate) => {
-
         var values_array = "lat=" + this.state.lat + "&lng=" + this.state.lng + "&id_poster=";
         this.state.checkBoxs1.forEach(i => {
             if (i.checked === true) {
@@ -70,7 +70,8 @@ export default class Location extends React.Component {
                 values_array += j.id + ","
             }
         });
-        values_array += "&" + this.state.input_price;
+        values_array += "&max_height=" + this.state.input_height + "&max_width=" + this.state.input_width
+        values_array += "&max_price=" + this.state.input_price;
         console.log(values_array);
         navigate('ResultSearch', { input_search: values_array })
         return;
@@ -99,31 +100,33 @@ export default class Location extends React.Component {
     }
 
     convertProductToListItem = (checkbox1) => {
-        return (<ListItem key={checkbox1.id} style={styles.itemStyle}>
-            <Body>
-                <Text style={styles.textBoxStyle}>{checkbox1.name}</Text>
-            </Body>
-            <Right>
-                <CheckBox
-                    color='red'
-                    checked={checkbox1.checked}
-                    onPress={this._handleCheckBox1.bind(this, checkbox1)} />
-            </Right>
-        </ListItem>);
+        return (
+            <ListItem key={checkbox1.id} style={styles.itemStyle}>
+                <Body>
+                    <Text style={styles.textBoxStyle}>{checkbox1.name}</Text>
+                </Body>
+                <Right>
+                    <CheckBox
+                        color='red'
+                        checked={checkbox1.checked}
+                        onPress={this._handleCheckBox1.bind(this, checkbox1)} />
+                </Right>
+            </ListItem>);
     }
 
     convertProductToListItem2 = (checkbox2) => {
-        return (<ListItem key={checkbox2.id} style={styles.itemStyle}>
-            <Body>
-                <Text style={styles.textBoxStyle}>{checkbox2.name}</Text>
-            </Body>
-            <Right>
-                <CheckBox
-                    color='red'
-                    checked={checkbox2.checked}
-                    onPress={this._handleCheckBox2.bind(this, checkbox2)} />
-            </Right>
-        </ListItem>);
+        return (
+            <ListItem key={checkbox2.id} style={styles.itemStyle}>
+                <Body>
+                    <Text style={styles.textBoxStyle}>{checkbox2.name}</Text>
+                </Body>
+                <Right>
+                    <CheckBox
+                        color='red'
+                        checked={checkbox2.checked}
+                        onPress={this._handleCheckBox2.bind(this, checkbox2)} />
+                </Right>
+            </ListItem>);
     }
 
     _gotoHome() {
@@ -136,7 +139,9 @@ export default class Location extends React.Component {
             <SafeAreaView>
                 <View style={styles.headerStyle}>
                     <TouchableOpacity onPress={this._gotoHome.bind(this)}>
-                        <Icon name="chevron-left" size={20} color="white" />
+                        <View style={{margin: 10, marginLeft: 5}}>
+                            <Icon name="chevron-left" size={20} color="white" />
+                        </View>
                     </TouchableOpacity>
                     <Text style={styles.titleStyle}>WallTag</Text>
                     <View />
@@ -193,9 +198,6 @@ export default class Location extends React.Component {
                                     types: "food"
                                 }}
                                 debounce={200}
-
-                                // filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']}
-                                debounce={200}
                                 renderLeftButton={() => <Icon name="search" size={18} style={{ marginLeft: 15, justifyContent: 'center', marginTop: 10 }} />}
                             />
 
@@ -212,7 +214,7 @@ export default class Location extends React.Component {
                                 {this.state.checkBoxs2.map(this.convertProductToListItem2)}
                             </List>
 
-                            <Text style={styles.mainTopicStyle}>KÍCH THƯỚC</Text>
+                            <Text style={styles.mainTopicStyle}>CHIỀU RỘNG</Text>
                             <ListItem noBorder style={styles.listItemStyle}>
                                 <Body style={{ backgroundColor: '#FFFFFF' }}>
                                     <KeyboardAvoidingView behavior='padding' enabled>
@@ -220,12 +222,29 @@ export default class Location extends React.Component {
                                             style={styles.inputStyle}
                                             keyboardType="numeric"
                                             placeholder="Kích thước"
-                                            onChangeText={(input_m2) => { this.state.input_m2 }}
+                                            onChangeText={(input_width) => { this.setState({ input_width }) }}
                                         />
                                     </KeyboardAvoidingView>
                                 </Body>
                                 <Right>
-                                    <Text style={{ fontFamily: 'Regular' }}>Mét vuông</Text>
+                                    <Text style={{ fontFamily: 'Regular' }}>Mét</Text>
+                                </Right>
+                            </ListItem>
+
+                            <Text style={styles.mainTopicStyle}>CHIỀU DÀI</Text>
+                            <ListItem noBorder style={styles.listItemStyle}>
+                                <Body style={{ backgroundColor: '#FFFFFF' }}>
+                                    <KeyboardAvoidingView behavior='padding' enabled>
+                                        <TextInput underlineColorAndroid={'transparent'}
+                                            style={styles.inputStyle}
+                                            keyboardType="numeric"
+                                            placeholder="Kích thước"
+                                            onChangeText={(input_height) => { this.setState({ input_height }) }}
+                                        />
+                                    </KeyboardAvoidingView>
+                                </Body>
+                                <Right>
+                                    <Text style={{ fontFamily: 'Regular' }}>Mét</Text>
                                 </Right>
                             </ListItem>
 

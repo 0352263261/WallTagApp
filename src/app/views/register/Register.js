@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-
+import apiManager from "../../controller/APIManager"
 const { height, width } = Dimensions.get('window');
 
 
@@ -16,43 +16,33 @@ export default class Register extends Component {
     };
   }
 
-  //TODO: Chinh lai height o nhap, progressbar khi dang ky
   _handleRegister() {
     if (this.state.email === "" || this.state.password === "" || this.state.confirmPass === "") {
       alert(`Không được rỗng!`);
     } else {
       if (this.state.password === this.state.confirmPass) {
-        fetch("https://spring-boot-wall-tags.herokuapp.com/adsharingspace/auth/register", {
-          "method": "POST",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            'emailOrPhone': this.state.email,
-            'password': this.state.password
-          })
-        })
-          .then((response) => response.json())
-          .then((responseJson) => {
-            if (responseJson.success == true) {
-              alert(`Dang ky thanh cong`);
-              this._back_login();
-            } else {
-              alert(`Tai khoan da ton tai!`);
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          })
+        apiManager.register(this.registerCallBack, this.state.email, this.state.password)
       } else {
-        alert('Mat khau chua dung!');
+        alert('Vui lòng xác thực lại mật khẩu!');
       }
     }
   }
 
+  registerCallBack = (responseJson) => {
+    if (this.registerCallBack === undefined) {
+      alert(`Đăng ký không thành công`)
+      return
+    }
+    if (responseJson.success === true) {
+      alert(`Đăng ký thành công`);
+      this._back_login();
+    } else {
+      alert(`Tài khoản đã tồn tại!`);
+    }
+  }
+
   _back_login() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.navigate('Login');
   }
 
