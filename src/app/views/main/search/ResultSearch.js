@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
         fontStyle: 'italic'
     },
     item_textStyle: {
-        // height: (height * 0.2) / 4,
         justifyContent: 'center'
     },
     item_price: {

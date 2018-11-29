@@ -152,7 +152,7 @@ export default class Location extends React.Component {
                     <Container style={styles.containerStyle}>
                         <Content>
                             <GooglePlacesAutocomplete
-                                placeholder='Tìm kiếm địa chỉ'
+                                placeholder='Nhập địa chỉ'
                                 listViewDisplayed={false}
                                 minLength={2}
                                 autoFocus={false}
