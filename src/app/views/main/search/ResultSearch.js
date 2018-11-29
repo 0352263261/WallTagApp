@@ -64,7 +64,7 @@ export default class ResultSearch extends React.Component {
             this.setState({ poster_list: responseJson.data });
             console.log(this.state.poster_list.length);
         } else {
-            alert(`Không có địa điểm nào`);
+            
         }
     }
 

@@ -6,6 +6,7 @@ import {
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Container, Body, ListItem, Left, Right, CheckBox, Content, List, View } from 'native-base';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import { AppServer } from '../../../common/Constants';
 
 const ic_search = require('../../../images/ic_search.png');
 const tim_kiem = require('../../../images/tim_kiem.png');
@@ -70,8 +71,8 @@ export default class Location extends React.Component {
                 values_array += j.id + ","
             }
         });
-        values_array += "&max_height=" + this.state.input_height + "&max_width=" + this.state.input_width
-        values_array += "&max_price=" + this.state.input_price;
+        values_array += ("&max_height=" + this.state.input_height + "&max_width=" + this.state.input_width)
+        values_array += ("&max_price=" + this.state.input_price + "&distance=10")
         console.log(values_array);
         navigate('ResultSearch', { input_search: values_array })
         return;
@@ -139,7 +140,7 @@ export default class Location extends React.Component {
             <SafeAreaView>
                 <View style={styles.headerStyle}>
                     <TouchableOpacity onPress={this._gotoHome.bind(this)}>
-                        <View style={{margin: 10, marginLeft: 5}}>
+                        <View style={{ margin: 10, marginLeft: 5 }}>
                             <Icon name="chevron-left" size={20} color="white" />
                         </View>
                     </TouchableOpacity>
@@ -169,7 +170,7 @@ export default class Location extends React.Component {
                                 getDefaultValue={() => ""}
 
                                 query={{
-                                    key: "AIzaSyCVN4Odh0FXwr2Q-ZkVOai2dzPz18AYWBs",
+                                    key: AppServer.GOOGLE_API_KEY,
                                     language: "vi",
                                     types: "address",
                                     location: "20.984019, 105.794699",
@@ -271,7 +272,7 @@ export default class Location extends React.Component {
                             <TouchableOpacity
                                 onPress={this._handleSearching.bind(this, navigate)}>
                                 <View style={styles.wrapper}>
-                                    <Image source={tim_kiem} style={styles.btnSearchStyle} />
+                                    <Text style={styles.titleStyle}>Tìm kiếm</Text>
                                 </View>
                             </TouchableOpacity>
                         </Content>
@@ -290,9 +291,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#EFEFF4', marginBottom: 20
     },
     wrapper: {
+        backgroundColor: 'red',
+        height: img_height,
+        width: img_width,
         margin: 20,
         alignItems: 'center',
-        marginBottom: 40
+        marginBottom: 40,
+        justifyContent: 'center'
     },
     item: {
         marginHorizontal: 20,
@@ -314,11 +319,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Regular',
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'white'
-    },
-    btnSearchStyle: {
-        height: img_height,
-        width: img_width
+        color: 'white',
     },
     itemStyle: {
         marginHorizontal: 20, backgroundColor: '#FFFFFF', height: 38

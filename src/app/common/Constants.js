@@ -1,5 +1,6 @@
 export const AppServer = {
     SERVER_HTTP_URL: 'https://spring-boot-wall-tags.herokuapp.com/adsharingspace/',
+    GOOGLE_API_KEY: 'AIzaSyCVN4Odh0FXwr2Q-ZkVOai2dzPz18AYWBs',
     //APIs
     API_LOGIN:'auth/login',
     API_REGISTER: 'auth/register',

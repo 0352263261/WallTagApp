@@ -75,7 +75,7 @@ export default class Menu extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#EF9A9A',
+        backgroundColor: '#CFD8DC',
         borderRightWidth: 3,
         borderColor: '#FFF',
         alignItems: 'center',

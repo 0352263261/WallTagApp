@@ -29,7 +29,6 @@ export default class Login extends React.Component {
     }
     if(responseJson.success === true){
       this.setState({ token: responseJson.data.id });
-      alert(this.state.token)
       this.props.navigation.navigate('Main');
     }else{
       alert(`Tài khoản nhập chưa đúng!`);

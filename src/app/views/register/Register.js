@@ -118,7 +118,7 @@ export default class Register extends Component {
 
 const styles = {
   backgroundStyle: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#BDBDBD',
     width: '100%',
     height: '100%'
   },
