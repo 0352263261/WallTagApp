@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity }
     from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { AppServer } from '../../../common/Constants';
+import { AppServer } from '../../common/Constants';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 const { height, width } = Dimensions.get('window');
 
@@ -17,7 +17,6 @@ export default class SearchAround extends React.Component {
     }
 
     componentDidMount(){
-        alert(`h`)
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 console.log(position);

@@ -4,7 +4,6 @@ import { Text, View, TouchableOpacity, Dimensions, Image, StyleSheet }
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 const { height, width } = Dimensions.get('window');
-const img_search_bar = require('../../../images/search_bar.png');
 export default class Header extends React.Component {
     _gotoSearchBar() {
         this.props.navigation.navigate('Location');

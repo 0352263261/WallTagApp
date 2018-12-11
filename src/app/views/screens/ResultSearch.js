@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, SafeAreaView }
     from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import apiManager from "../../../controller/APIManager";
+import apiManager from "../../controller/APIManager";
 
 const { height, width } = Dimensions.get('window');
 const img_height = height * 0.2;

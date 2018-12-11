@@ -1,26 +1,30 @@
 import React from 'react';
-import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, ScrollView, RefreshControl }
+import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, AsyncStorage, RefreshControl, ScrollView }
     from 'react-native';
-import apiManager from "../../../controller/APIManager";
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import apiManager from "../../controller/APIManager";
 
 const { height, width } = Dimensions.get('window');
+
 class ItemPoster extends React.Component {
-    _gotoDetail() {
-        const { navigation } = this.props;
-        const { item } = this.props;
-        navigation.navigate('DetailPost', {
-            result_post: item,
-            back_history: "Main"
-        });
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            item: this.props.item,
+            index: this.props.index,
+            onClick: this.props.onClick
+        }
     }
 
     render() {
-        const { item } = this.props;
+        const item = this.state.item
+        const index = this.state.index
         return (
             <View>
-                <TouchableOpacity onPress={this._gotoDetail.bind(this)}>
+                <TouchableOpacity onPress={() => this.state.onClick(item, index)}>
                     <View style={styles.item_wrapper}>
-                        <View style={{ flex: 5 }}>
+                        <View style={{ backgroundColor: 'red', flex: 5 }}>
                             <Image source={{ uri: item.imageUrl }} style={styles.img_style} />
                         </View>
                         <View style={{ flex: 5, marginLeft: 10, padding: 10 }}>
@@ -28,7 +32,6 @@ class ItemPoster extends React.Component {
                             <Text style={styles.item_textStyle}>{item.posterType[0].type}</Text>
                             <Text style={styles.item_textStyle}>Kích thước: {item.width * item.height} m2</Text>
                             <Text style={styles.item_price}>Giá: {item.price.text} {item.price.unit}</Text>
-                            <Text style={styles.item_textStyle}>{item.dateCreated}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -36,8 +39,7 @@ class ItemPoster extends React.Component {
         );
     }
 }
-
-export default class Home extends React.Component {
+export default class SavedPoster extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -47,64 +49,80 @@ export default class Home extends React.Component {
     }
 
     componentDidMount() {
-        apiManager.request_poster(this.getPosterCallBack)
+        apiManager.refresh_favorite_poster(this.favoritePosterCallback)
     }
 
-    getPosterCallBack = (responseJson) => {
-        if (responseJson === undefined) {
-            alert(`Lỗi tải dữ liệu`)
-            return
+    updateItem = (item, action) => {
+        if (action === "action_remove") {
+            posts = this.state.listPosts.filter(element => element.id !== item.id)
         }
-
-        if (responseJson.success === true) {
-            posts = responseJson.data.map((item, i) => {
-                item.saved = false;
-                return item;
-            })
-            this.setState({ listPosts: posts });
-        } else {
-            alert(`Không có dữ liệu`)
-        }
+        this.setState({ listPosts: posts });
     }
 
-    _onRefreshPostList = () => {
-        this.setState({ refreshing: true });
-        fetchData().then(() => {
-            this.setState({ refreshing: false });
+    _handleClick = (item, index) => {
+        this.props.navigation.navigate('DetailPost', {
+            result_post: item,
+            back_history: "Main",
+            callback: this.updateItem
         });
     }
 
-    render() {
-        const { navigation } = this.props;
-        return (
-            <View style={styles.container}>
-                <View style={styles.headerStyles}>
-                    <Text style={styles.textTitleStyle}>Poster nổi bật</Text>
-                </View>
-                <ScrollView
+    _onRefreshUpdatePost = () => {
+        this.setState({ refreshing: true });
+        apiManager.refresh_favorite_poster(this.favoritePosterCallback)
+    }
 
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this._onRefresh}
-                        />
-                    }
-                >
+    favoritePosterCallback = (responseJson) => {
+        if (responseJson === undefined) {
+            alert(`Lỗi cập nhật`)
+            return
+        }
+        if (responseJson.success === true) {
+            posts = responseJson.data.map((item, i) => {
+                item.saved = true;
+                return item;
+            })
+            this.setState({ listPosts: posts });
+            this.setState({ refreshing: false });
+        } else {
+            alert(`Có lỗi xảy ra!`);
+        }
+    }
+
+    render() {
+        return (
+            <ScrollView
+                style={styles.container}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={this._onRefreshUpdatePost}
+                    />
+                }
+            >
+                <View style={styles.headerStyles}>
+                    <Text style={styles.textTitleStyle}>Địa điểm yêu thích</Text>
+                </View>
+                <View style={{ marginBottom: 35 }}>
                     <FlatList
                         data={this.state.listPosts}
                         renderItem={({ item, index }) => {
                             return (<ItemPoster
-                                navigation={navigation}
                                 item={item}
+                                index={index}
+                                onClick={this._handleClick}
                             />);
                         }}
                         keyExtractor={(item, index) => `${item.id}`}
                     />
-                </ScrollView>
-            </View>
+                </View>
+            </ScrollView>
         );
     }
 }
+
+const widthImg = width - 30;
+const heightImg = (widthImg * 300) / 500 - 30;
 
 const styles = StyleSheet.create({
     container: {
@@ -119,29 +137,28 @@ const styles = StyleSheet.create({
         fontFamily: 'Regular',
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#F44336',
+        color: 'red',
         fontStyle: 'italic'
-    },
-    img_style: {
-        width: (height * 0.2) + 30,
-        height: height * 0.2
     },
     item_wrapper: {
         flex: 1,
-        marginTop: 5,
-        marginLeft: 5,
-        marginRight: 5,
+        margin: 5,
+        marginBottom: 5,
         height: height * 0.2,
         flexDirection: 'row',
         backgroundColor: '#FFF',
     },
     item_textStyle: {
-        height: (height * 0.2) / 5.5,
+        height: (height * 0.2) / 4,
         justifyContent: 'center'
     },
     item_price: {
-        height: (height * 0.2) / 5.5,
+        height: (height * 0.2) / 4,
         justifyContent: 'center',
         color: '#FF3D00'
-    }
+    },
+    img_style: {
+        width: (height * 0.2) + 30,
+        height: height * 0.2
+    },
 });

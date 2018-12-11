@@ -1,17 +1,16 @@
-
 import React, { Component } from "react";
 import { StatusBar } from "react-native";
 import { createStackNavigator } from "react-navigation";
-import DetailPost from "./src/app/views/main/detailposter/DetailPost";
-import Location from "./src/app/views/main/search/Location";
-import Login from "./src/app/views/login/Login";
-import Register from "./src/app/views/register/Register";
-import Main from "./src/app/views/main/Main";
-import Authentication from "./src/app/views/main/authentication/Authentication";
-import Changeinfo from "./src/app/views/main/changeInfo/ChangeInfo";
-import NewFeed from "./src/app/views/main/pager/NewFeed";
-import ResultSearch from "./src/app/views/main/search/ResultSearch";
-import Approve from "./src/app/views/main/approve/Approve";
+import DetailPost from "./src/app/views/screens/DetailPost";
+import Location from "./src/app/views/screens/Location";
+import Login from "./src/app/views/screens/Login";
+import Register from "./src/app/views/screens/Register";
+import Main from "./src/app/views/screens/Main";
+import Authentication from "./src/app/views/screens/Authentication";
+import Changeinfo from "./src/app/views/screens/ChangeInfo";
+import NewFeed from "./src/app/views/screens/NewFeed";
+import ResultSearch from "./src/app/views/screens/ResultSearch";
+import Approve from "./src/app/views/screens/Approve";
 
 const MyStack = createStackNavigator({
   Login: {screen: Login},
@@ -22,7 +21,6 @@ const MyStack = createStackNavigator({
   Location: {screen: Location},
   DetailPost: {screen: DetailPost},
   NewFeed: {screen: NewFeed},
-  Login: {screen: Login},
   Register: {screen: Register},
   ResultSearch: {screen: ResultSearch},
   Approve: {screen: Approve}
