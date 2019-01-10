@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, FlatList, TouchableOpacity, ScrollView, RefreshControl }
     from 'react-native';
-import apiManager from "../../controller/APIManager";
+import apiManager from "../../network/APIManager";
 
 const { height, width } = Dimensions.get('window');
 class ItemPoster extends React.Component {

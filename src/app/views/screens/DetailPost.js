@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, ScrollView }
     from 'react-native';
-import apiManager from "../../controller/APIManager"
+import apiManager from "../../network/APIManager"
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Swiper from 'react-native-swiper';
 
@@ -18,7 +18,10 @@ export default class DetailPost extends React.Component {
     }
 
     _handleContact() {
-        this.props.navigation.navigate('Approve');
+        const {navigation} = this.props
+        navigation.navigate('Approve',{
+            id_post: this.state.post.id
+        });
     }
 
     _handleBack() {

@@ -44,6 +44,32 @@ class APIManager {
                 console.error(error);
             })
     }
+    
+    approve_place(id_user, id_place, start_date, end_date, note, posterURL, contract_callback){
+        let baseUrl = AppServer.SERVER_HTTP_URL + AppServer.API_CONTRACT
+        fetch(baseUrl,{
+            "method" : "POST",
+            headers:{
+                'Authorization': id_user,
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                'endDate': end_date,
+                'idPlace': id_place,
+                'note': note,
+                'posterUrl': posterURL,
+                'startDate': start_date
+            })
+        })
+        .then((response) => response.json())
+        .then((responseJson)=>{
+            contract_callback(responseJson)
+        })
+        .catch((error)=>{
+            console.error(error);
+        })
+    }
 
     request_poster(getPosterCallBack) {
         let baseUrl = AppServer.SERVER_HTTP_URL + AppServer.API_REQUEST_POSTER

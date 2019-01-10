@@ -11,6 +11,7 @@ import Changeinfo from "./src/app/views/screens/ChangeInfo";
 import NewFeed from "./src/app/views/screens/NewFeed";
 import ResultSearch from "./src/app/views/screens/ResultSearch";
 import Approve from "./src/app/views/screens/Approve";
+import History from "./src/app/views/screens/History"
 
 const MyStack = createStackNavigator({
   Login: {screen: Login},
@@ -18,6 +19,7 @@ const MyStack = createStackNavigator({
   Main: { screen: Main },
   Authentication: { screen: Authentication },
   Changeinfo: {screen: Changeinfo},
+  History: {screen: History},
   Location: {screen: Location},
   DetailPost: {screen: DetailPost},
   NewFeed: {screen: NewFeed},

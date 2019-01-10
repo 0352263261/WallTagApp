@@ -1,16 +1,18 @@
 import React from 'react';
-import { Text, View, StyleSheet, Dimensions, Image, TouchableOpacity, SafeAreaView }
+import { Text, View, StyleSheet, Dimensions, KeyboardAvoidingView, TouchableOpacity, TextInput }
     from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import DatePicker from 'react-native-datepicker';
+import apiManager from '../../network/APIManager';
 
 const { width, height } = Dimensions.get('window');
 export default class Approve extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            start_date: '',
+            id_post: this.props.navigation.state.params.id_post,
             end_date: '',
+            note: ''
         };
     }
 
@@ -18,13 +20,30 @@ export default class Approve extends React.Component {
         this.props.navigation.navigate('DetailPost');
     }
 
+    _handle_approve = (current_date) => {
+        apiManager.approve_place(10000, this.state.id_post, current_date, this.state.end_date, this.state.note, "posterURL", this.contract_callback)
+    }
+
+    contract_callback = (responseJson) => {
+        if (responseJson === undefined) {
+            alert(`Vui lòng kiểm tra lại thông tin!`);
+            return;
+        }
+        if (responseJson.success === true) {
+            alert(`Đã gửi yêu cầu, vui lòng đợi phản hồi từ nhà cung cấp`)
+        } else {
+            alert(`Đã gửi yêu cầu, vui lòng đợi phản hồi từ nhà cung cấp!`);
+        }
+    }
+
     render() {
+        var current_date = new Date().getDate() + "/" + parseInt(new Date().getMonth() + 1) + "/" + new Date().getFullYear();
         const my_datePicker = (
             <DatePicker
                 style={{ width: 200 }}
                 date={this.state.date}
                 mode="date"
-                placeholder="Chọn ngày"
+                placeholder={this.state.end_date}
                 format="DD-MM-YYYY"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
@@ -39,7 +58,7 @@ export default class Approve extends React.Component {
                         marginLeft: 36
                     }
                 }}
-                onDateChange={(date) => { this.setState({ start_date: date }) }}
+                onDateChange={(date) => { this.setState({ end_date: date }) }}
             />
         );
         return (
@@ -56,27 +75,39 @@ export default class Approve extends React.Component {
 
                 <View style={styles.wrapper}>
                     <View style={{ margin: 10 }}>
-                        <Text>Mã khách hàng: </Text>
+                        <Text>Mã khách hàng: 10000</Text>
                     </View>
 
                     <View style={{ margin: 10 }}>
-                        <Text>Mã địa điểm: </Text>
+                        <Text>Mã địa điểm: {this.state.id_post}</Text>
                     </View>
 
                     <View style={styles.container}>
-                        <Text style={{ margin: 10 }}>Ngày bắt đầu</Text>
+                        <Text style={{ margin: 10 }}>Ngày bắt đầu:</Text>
                         <View style={{ marginLeft: 40 }}>
-                            {my_datePicker}
+                            <Text>{current_date}</Text>
                         </View>
                         <Text style={{ margin: 10 }}>Ngày kết thúc</Text>
                         <View style={{ marginLeft: 40 }}>
                             {my_datePicker}
                         </View>
+                        <Text style={{ margin: 10 }}>Ghi chú</Text>
+                        <View style={{ marginLeft: 40 }}>
+                            <KeyboardAvoidingView behavior="padding" enabled>
+                                <TextInput
+                                    style={styles.inputStyle}
+                                    placeholder='Ghi chú'
+                                    onChangeText={(note) => {
+                                        this.setState({ note })
+                                    }}
+                                />
+                            </KeyboardAvoidingView>
+                        </View>
                     </View>
                 </View>
 
                 <View style={styles.btnWrapperStyle}>
-                    <TouchableOpacity style={styles.btnBackStyle}>
+                    <TouchableOpacity style={styles.btnBackStyle} onPress={this._gotoDetail.bind(this)}>
                         <View>
                             <Text style={{ color: '#212121', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>
                                 Quay lại
@@ -84,7 +115,7 @@ export default class Approve extends React.Component {
                         </View>
                     </TouchableOpacity>
                     <View></View>
-                    <TouchableOpacity style={styles.btnSendStyle}>
+                    <TouchableOpacity style={styles.btnSendStyle} onPress={() => this._handle_approve(current_date)}>
                         <View>
                             <Text style={{ color: '#FFF', fontFamily: 'Regular', fontSize: 14, fontWeight: 'bold' }}>Gửi</Text>
                         </View>

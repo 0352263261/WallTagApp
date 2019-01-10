@@ -5,7 +5,7 @@ import {
   SafeAreaView, KeyboardAvoidingView, ImageBackground
 } from 'react-native';
 
-import apiManager from "../../controller/APIManager";
+import apiManager from "../../network/APIManager";
 
 const bg = require('../../images/new-bg.png');
 export default class Login extends React.Component {

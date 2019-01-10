@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import apiManager from "../../controller/APIManager"
+import apiManager from "../../network/APIManager"
 const { height, width } = Dimensions.get('window');
 
 

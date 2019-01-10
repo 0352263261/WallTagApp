@@ -41,18 +41,18 @@ class ItemPoster extends React.Component {
     }
 }
 
-export default class ResultSearch extends React.Component {
+export default class History extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            search_style: this.props.navigation.state.params.input_search,
-            poster_list: []
-        };
+        // this.state = {
+        //     search_style: this.props.navigation.state.params.input_search,
+        //     poster_list: []
+        // };
     }
 
     componentDidMount() {
-        apiManager.find_place(this.findPlaceCallback, this.state.search_style)
+        // Goi API cac dia diem dang thue/ da thue
     }
 
     findPlaceCallback = (responseJson) => {
@@ -81,13 +81,13 @@ export default class ResultSearch extends React.Component {
                         <Icon name="chevron-left" size={20} color="white" />
                     </TouchableOpacity>
                     <View style={{ justifyContent: 'center' }}>
-                        <Text style={styles.titleStyle}>Kết quả tìm kiếm</Text>
+                        <Text style={styles.titleStyle}>Địa điểm đã/đang thuê</Text>
                     </View>
                     <View />
                 </View>
 
                 <View style={{ backgroundColor: '#FFF', height: 48, margin: 5, justifyContent: 'center', paddingLeft: 10 }}>
-                    <Text style={styles.textStyle}>{this.state.poster_list.length} kết quả</Text>
+                    <Text style={styles.textStyle}>{this.state.poster_list.length} đang thuê</Text>
                 </View>
 
                 <View style={{ margin: 5, marginTop: 0 }}>

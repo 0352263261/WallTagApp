@@ -48,7 +48,7 @@ export default class Menu extends React.Component {
                 <Text style={styles.textUserStyle}>Bui Ngoc Hoang</Text>
                 <View>
                     <TouchableOpacity style={styles.btnSignInStyle} onPress={this._gotoHistory.bind(this)}>
-                        <Text style={styles.textSignInStyle}>Lịch sử mua hàng</Text>
+                        <Text style={styles.textSignInStyle}>Lịch sử</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.btnSignInStyle} onPress={this._gotoChangeInfo.bind(this)}>
                         <Text style={styles.textSignInStyle}>Thông tin cá nhân</Text>
